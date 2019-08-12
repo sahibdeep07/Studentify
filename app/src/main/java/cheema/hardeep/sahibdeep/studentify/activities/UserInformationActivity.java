@@ -1,5 +1,7 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +13,10 @@ import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 
 public class UserInformationActivity extends AppCompatActivity {
+
+    public static Intent createIntent(Context context) {
+        return new Intent(context, UserInformationActivity.class);
+    }
 
     @BindView(R.id.name)
     TextInputEditText name;
