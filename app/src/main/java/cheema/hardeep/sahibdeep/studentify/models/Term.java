@@ -4,6 +4,7 @@ package cheema.hardeep.sahibdeep.studentify.models;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
 import java.util.Date;
 import java.util.List;
@@ -23,9 +24,6 @@ public class Term {
 
     @ColumnInfo(name = "end_date")
     private Date endDate;
-
-    @ColumnInfo(name = "student_classes")
-    private List<StudentClass> studentClasses;
 
     public int getId() {
         return id;
@@ -57,13 +55,5 @@ public class Term {
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    public List<StudentClass> getStudentClasses() {
-        return studentClasses;
-    }
-
-    public void setStudentClasses(List<StudentClass> studentClasses) {
-        this.studentClasses = studentClasses;
     }
 }

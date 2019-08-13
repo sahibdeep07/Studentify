@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
 import java.util.List;
 
@@ -38,9 +39,6 @@ public class StudentClass {
 
     @ColumnInfo(name = "end_time")
     private String endTime;
-
-    @ColumnInfo(name = "tasks")
-    private List<Task> tasks;
 
     public int getId() {
         return id;
@@ -104,13 +102,5 @@ public class StudentClass {
 
     public void setEndTime(String endTime) {
         this.endTime = endTime;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
-    }
-
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
     }
 }

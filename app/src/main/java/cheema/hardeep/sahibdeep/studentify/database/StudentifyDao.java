@@ -10,9 +10,11 @@ import androidx.room.Update;
 import java.util.List;
 
 import cheema.hardeep.sahibdeep.studentify.models.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.models.StudentClassDetails;
 import cheema.hardeep.sahibdeep.studentify.models.Task;
 import cheema.hardeep.sahibdeep.studentify.models.TaskType;
 import cheema.hardeep.sahibdeep.studentify.models.Term;
+import cheema.hardeep.sahibdeep.studentify.models.TermDetails;
 import cheema.hardeep.sahibdeep.studentify.models.UserInformation;
 
 @Dao
@@ -25,10 +27,10 @@ public interface StudentifyDao {
     Long insertUserInformation(UserInformation userInformation);
 
     @Query("SELECT * FROM UserInformation WHERE student_id =:studentId")
-    UserInformation getUserInformation(int studentId);
+    UserInformation getUserInformation(String studentId);
 
     @Update
-    Long updateUserInformation(UserInformation userInformation);
+    int updateUserInformation(UserInformation userInformation);
 
     @Delete
     void deleteUserInformation(UserInformation userInformation);
@@ -42,8 +44,11 @@ public interface StudentifyDao {
     @Query("SELECT * FROM Term WHERE name =:termName")
     UserInformation getTerm(String termName);
 
+    @Query("SELECT * FROM Term WHERE name =:termName")
+    List<TermDetails> getTermWithClasses(String termName);
+
     @Update
-    Long updateTerm(Term term);
+    int updateTerm(Term term);
 
     @Delete
     void deleteTerm(Term term);
@@ -57,11 +62,14 @@ public interface StudentifyDao {
     @Query("SELECT * FROM StudentClass WHERE term_id =:termId")
     List<StudentClass> getStudentClasses(int termId);
 
-    @Query("SELECT * FROM StudentClass WHERE term_id =:termId AND days in (:day)")
-    List<StudentClass> getStudentClassesWithDay(int termId, String day);
+    @Query("SELECT * FROM StudentClass WHERE days in (:day)")
+    List<StudentClass> getStudentClassesWithDay(String day);
+
+    @Query("SELECT * FROM StudentClass WHERE days in (:day)")
+    List<StudentClassDetails> getStudentClassesWithTaks(String day);
 
     @Update
-    Long updateStudentClass(StudentClass studentClass);
+    int updateStudentClass(StudentClass studentClass);
 
     @Delete
     void deleteStudentClass(StudentClass studentClass);
@@ -79,7 +87,7 @@ public interface StudentifyDao {
     List<Task> getTaskWithType(int studentClassId, TaskType taskType);
 
     @Update
-    Long upddateTask(Task task);
+    int upddateTask(Task task);
 
     @Delete
     void deleteTask(Task task);
