@@ -96,7 +96,7 @@ public class SplashActivity extends AppCompatActivity {
         StudentifyDatabaseProvider.getDao(this).insertStudentClass(studentClass4);
 
 
-        List<StudentClass> studentClassesWithDay = StudentifyDatabaseProvider.getDao(this).getStudentClassesWithDay(Arrays.asList("Tue"));
+        List<StudentClass> studentClassesWithDay = StudentifyDatabaseProvider.getDao(this).getStudentClassesWithDay("%Tue%");
         Log.d("HSING", "Student Classes with Day Size: " + studentClassesWithDay.size());
         for(StudentClass studentClass: studentClassesWithDay) {
             Log.d("HSING", "Student Classes with Day: " + studentClass.getName());

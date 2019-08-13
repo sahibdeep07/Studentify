@@ -68,10 +68,10 @@ public interface StudentifyDao {
     @Query("SELECT * FROM StudentClass WHERE term_id =:termId")
     List<StudentClass> getStudentClasses(int termId);
 
-    @Query("SELECT * FROM StudentClass WHERE days in (:days)")
-    List<StudentClass> getStudentClassesWithDay(List<String> days);
+    @Query("SELECT * FROM StudentClass WHERE days LIKE :days")
+    List<StudentClass> getStudentClassesWithDay(String days);
 
-    @Query("SELECT * FROM StudentClass WHERE days in (:day)")
+    @Query("SELECT * FROM StudentClass WHERE days LIKE :day")
     List<StudentClassDetails> getStudentClassesWithTaks(String day);
 
     @Update
