@@ -4,10 +4,10 @@ import androidx.room.Database;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import cheema.hardeep.sahibdeep.studentify.models.StudentClass;
-import cheema.hardeep.sahibdeep.studentify.models.Task;
-import cheema.hardeep.sahibdeep.studentify.models.Term;
-import cheema.hardeep.sahibdeep.studentify.models.UserInformation;
+import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
+import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
 
 @Database(entities = {UserInformation.class, Term.class, StudentClass.class, Task.class}, version = 1)
 @TypeConverters(Converters.class)

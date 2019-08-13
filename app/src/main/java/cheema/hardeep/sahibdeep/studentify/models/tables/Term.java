@@ -1,4 +1,4 @@
-package cheema.hardeep.sahibdeep.studentify.models;
+package cheema.hardeep.sahibdeep.studentify.models.tables;
 
 
 import androidx.room.ColumnInfo;

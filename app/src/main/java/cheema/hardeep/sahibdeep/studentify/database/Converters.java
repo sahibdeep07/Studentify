@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import cheema.hardeep.sahibdeep.studentify.models.TaskType;
+import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
 
 public class Converters {
 

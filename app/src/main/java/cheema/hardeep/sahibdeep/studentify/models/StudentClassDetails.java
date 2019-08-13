@@ -4,7 +4,11 @@ package cheema.hardeep.sahibdeep.studentify.models;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 
 public class StudentClassDetails {
 
@@ -12,7 +16,7 @@ public class StudentClassDetails {
     private StudentClass studentClass;
 
     @Relation(parentColumn = "id", entityColumn = "student_class_id", entity = Task.class)
-    private List<Task> tasks;
+    private List<Task> tasks = new ArrayList<>();
 
     public StudentClass getStudentClass() {
         return studentClass;

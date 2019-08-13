@@ -9,13 +9,13 @@ import androidx.room.Update;
 
 import java.util.List;
 
-import cheema.hardeep.sahibdeep.studentify.models.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.models.StudentClassDetails;
-import cheema.hardeep.sahibdeep.studentify.models.Task;
-import cheema.hardeep.sahibdeep.studentify.models.TaskType;
-import cheema.hardeep.sahibdeep.studentify.models.Term;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
+import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 import cheema.hardeep.sahibdeep.studentify.models.TermDetails;
-import cheema.hardeep.sahibdeep.studentify.models.UserInformation;
+import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
 
 @Dao
 public interface StudentifyDao {
@@ -39,13 +39,16 @@ public interface StudentifyDao {
      * Term Table Access Methods
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    Long insertTerrm(Term term);
+    Long insertTerm(Term term);
+
+    @Query("SELECT * FROM Term")
+    List<Term> getAllTerms();
 
     @Query("SELECT * FROM Term WHERE name =:termName")
-    UserInformation getTerm(String termName);
+    Term getTerm(String termName);
 
     @Query("SELECT * FROM Term WHERE name =:termName")
-    List<TermDetails> getTermWithClasses(String termName);
+    TermDetails getTermWithClasses(String termName);
 
     @Update
     int updateTerm(Term term);
@@ -59,11 +62,14 @@ public interface StudentifyDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertStudentClass(StudentClass studentClass);
 
+    @Query("SELECT * FROM StudentClass")
+    List<StudentClass> getAllStudentClasses();
+
     @Query("SELECT * FROM StudentClass WHERE term_id =:termId")
     List<StudentClass> getStudentClasses(int termId);
 
-    @Query("SELECT * FROM StudentClass WHERE days in (:day)")
-    List<StudentClass> getStudentClassesWithDay(String day);
+    @Query("SELECT * FROM StudentClass WHERE days in (:days)")
+    List<StudentClass> getStudentClassesWithDay(List<String> days);
 
     @Query("SELECT * FROM StudentClass WHERE days in (:day)")
     List<StudentClassDetails> getStudentClassesWithTaks(String day);
@@ -79,6 +85,9 @@ public interface StudentifyDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTask(Task task);
+
+    @Query("SELECT * FROM Task")
+    List<Task> getAllTasks();
 
     @Query("SELECT * FROM Task WHERE student_class_id =:studentClassId")
     List<Task> getTasks(int studentClassId);
