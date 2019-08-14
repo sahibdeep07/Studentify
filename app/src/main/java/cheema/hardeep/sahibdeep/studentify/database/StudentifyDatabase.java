@@ -13,5 +13,11 @@ import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
 @TypeConverters(Converters.class)
 public abstract class StudentifyDatabase extends RoomDatabase {
 
-    public abstract StudentifyDao studentifyDao();
+    public abstract UserInformationDao userInformationDao();
+
+    public abstract TermDao termDao();
+
+    public abstract StudentClassDao studentClassDao();
+
+    public abstract TaskDao taskDao();
 }

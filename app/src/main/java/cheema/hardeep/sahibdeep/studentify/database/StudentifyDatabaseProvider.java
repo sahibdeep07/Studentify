@@ -21,8 +21,20 @@ public class StudentifyDatabaseProvider {
         return INSTANCE;
     }
 
-    public static StudentifyDao getDao(Context context) {
-        return getDatabase(context).studentifyDao();
+    public static UserInformationDao getUserInformationDao(Context context) {
+        return getDatabase(context).userInformationDao();
+    }
+
+    public static TermDao getTermDao(Context context) {
+        return getDatabase(context).termDao();
+    }
+
+    public static StudentClassDao getStudentClassDao(Context context) {
+        return getDatabase(context).studentClassDao();
+    }
+
+    public static TaskDao getTaskDao(Context context) {
+        return getDatabase(context).taskDao();
     }
 
     private static void destroyInstance() {

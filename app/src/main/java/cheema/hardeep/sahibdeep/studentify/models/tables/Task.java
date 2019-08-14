@@ -15,10 +15,6 @@ public class Task {
     private int id;
 
     @ColumnInfo(name = "student_class_id")
-    @ForeignKey(entity = StudentClass.class,
-            parentColumns = {"id"},
-            childColumns = {"student_class_id"},
-            onDelete = ForeignKey.CASCADE)
     private int studentClassId;
 
     @ColumnInfo(name = "name")

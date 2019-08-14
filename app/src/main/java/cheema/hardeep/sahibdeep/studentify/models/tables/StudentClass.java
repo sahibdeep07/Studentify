@@ -5,6 +5,7 @@ import androidx.room.Entity;
 import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -15,10 +16,6 @@ public class StudentClass {
     private int id;
 
     @ColumnInfo(name = "term_id")
-    @ForeignKey(entity = Term.class,
-            parentColumns = {"id"},
-            childColumns = {"term_id"},
-            onDelete = ForeignKey.CASCADE)
     private int termId;
 
     @ColumnInfo(name = "name")
@@ -34,10 +31,10 @@ public class StudentClass {
     private List<String> days;
 
     @ColumnInfo(name = "start_time")
-    private String startTime;
+    private Date startTime;
 
     @ColumnInfo(name = "end_time")
-    private String endTime;
+    private Date endTime;
 
     public int getId() {
         return id;
@@ -87,19 +84,19 @@ public class StudentClass {
         this.days = days;
     }
 
-    public String getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(String startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public String getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(String endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 }
