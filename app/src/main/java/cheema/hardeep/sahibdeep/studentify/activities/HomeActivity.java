@@ -26,6 +26,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        getSupportActionBar().hide();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNav);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
         loadFragment(new ClassesFragment());
@@ -38,7 +39,8 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 loadFragment(new ClassesFragment());
                 return true;
             case R.id.menu_schedule:
-                loadFragment(new ScheduleFragment());
+//                loadFragment(new ScheduleFragment());
+                startActivity(ClassInformationActivity.createIntent(this));
                 return true;
             case R.id.menu_user_information:
                 startActivity(UserInformationActivity.createIntent(this));

@@ -25,10 +25,10 @@
 
 
     <ScrollView
+        android:id="@+id/classInfoScrollView"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:background="@drawable/bottom_curve_background"
-        app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/classInformationHeader">
@@ -53,6 +53,8 @@
                     android:id="@+id/className"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
                     android:textColor="@color/primaryTextColor"
                     android:typeface="serif" />
 
@@ -73,6 +75,8 @@
                     android:id="@+id/professorName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:maxLines="1"
                     android:textColor="@color/primaryTextColor"
                     android:typeface="serif" />
 
@@ -93,6 +97,8 @@
                     android:id="@+id/RoomNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="text"
+                    android:maxLines="1"
                     android:textColor="@color/primaryTextColor"
                     android:typeface="serif" />
 
@@ -173,7 +179,7 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_weight="1"
                     android:background="@drawable/transparent_curved_button"
                     android:text="@string/start_time"
@@ -188,27 +194,19 @@
                     android:layout_marginLeft="12dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginRight="12dp"
-                    android:layout_marginBottom="12dp"
+                    android:layout_marginBottom="16dp"
                     android:layout_weight="1"
                     android:background="@drawable/transparent_curved_button"
                     android:text="@string/end_time"
                     android:textColor="@color/primaryTextColor"
                     android:textSize="16sp"
-                    android:typeface="serif"
-                    />
+                    android:typeface="serif" />
 
             </LinearLayout>
 
         </LinearLayout>
 
     </ScrollView>
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.60" />
 
     <Button
         android:id="@+id/cancelButton"
@@ -226,7 +224,9 @@
         android:typeface="serif"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/addButton"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/classInfoScrollView"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/addButton"
@@ -244,7 +244,9 @@
         android:typeface="serif"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cancelButton" />
+        app:layout_constraintStart_toEndOf="@id/cancelButton"
+        app:layout_constraintTop_toBottomOf="@id/classInfoScrollView"
+        app:layout_constraintVertical_bias="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

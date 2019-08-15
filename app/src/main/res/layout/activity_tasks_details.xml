@@ -53,7 +53,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/primaryTextColor"
-                    android:typeface="serif" />
+                    android:typeface="serif"
+                    android:inputType="text"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +136,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/primaryTextColor"
-                    android:typeface="serif" />
+                    android:typeface="serif"
+                    android:inputType="time"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -147,6 +149,7 @@
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
                 android:hint="@string/notes"
                 android:textColorHint="@color/primaryTextColor">
 
@@ -155,9 +158,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="top"
-                    android:minLines="8"
+                    android:minLines="7"
+                    android:maxLines="7"
                     android:textColor="@color/primaryTextColor"
-                    android:typeface="serif" />
+                    android:typeface="serif"
+                    android:inputType="textMultiLine"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -206,6 +211,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.70" />
+        app:layout_constraintGuide_percent="0.75" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
