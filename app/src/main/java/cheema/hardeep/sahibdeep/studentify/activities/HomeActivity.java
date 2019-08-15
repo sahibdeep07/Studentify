@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cheema.hardeep.sahibdeep.studentify.R;
+import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
+import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 
 public class HomeActivity extends AppCompatActivity {
     private TextView mTextMessage;
