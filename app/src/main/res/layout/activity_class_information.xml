@@ -33,10 +33,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/classInformationHeader">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/classNameContainer"
@@ -47,7 +46,10 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
                 android:hint="@string/name"
-                android:textColorHint="@color/primaryTextColor">
+                android:textColorHint="@color/primaryTextColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/className"
@@ -69,7 +71,10 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
                 android:hint="@string/professor_name"
-                android:textColorHint="@color/primaryTextColor">
+                android:textColorHint="@color/primaryTextColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/classNameContainer">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/professorName"
@@ -91,7 +96,10 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
                 android:hint="@string/room_number"
-                android:textColorHint="@color/primaryTextColor">
+                android:textColorHint="@color/primaryTextColor"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/professorNameContainer">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/RoomNumber"
@@ -105,106 +113,114 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+            <Button
+                android:id="@+id/mondayButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginStart="6dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/mon"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
-                <Button
-                    android:id="@+id/mondayButton"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="6dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/curved_square_button_white"
-                    android:text="@string/mon" />
+            <Button
+                android:id="@+id/tuesdayButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/tue"
+                app:layout_constraintStart_toEndOf="@id/mondayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
-                <Button
-                    android:id="@+id/tuesdayButton"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/curved_square_button_white"
-                    android:text="@string/tue" />
+            <Button
+                android:id="@+id/wednesdayButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/wed"
+                app:layout_constraintStart_toEndOf="@id/tuesdayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
-                <Button
-                    android:id="@+id/wednesdayButton"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/curved_square_button_white"
-                    android:text="@string/wed" />
+            <Button
+                android:id="@+id/thursdayButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/thu"
+                app:layout_constraintStart_toEndOf="@id/wednesdayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
-                <Button
-                    android:id="@+id/thursdayButton"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/curved_square_button_white"
-                    android:text="@string/thu" />
+            <Button
+                android:id="@+id/fridayButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/fri"
+                app:layout_constraintStart_toEndOf="@id/thursdayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
-                <Button
-                    android:id="@+id/fridayButton"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="16dp"
-                    android:background="@drawable/curved_square_button_white"
-                    android:text="@string/fri" />
+            <Button
+                android:id="@+id/saturdayButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="6dp"
+                android:layout_marginRight="6dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/sat"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/fridayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
-                <Button
-                    android:id="@+id/saturdayButton"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="6dp"
-                    android:background="@drawable/curved_square_button_white"
-                    android:text="@string/sat" />
 
-            </LinearLayout>
+            <Button
+                android:id="@+id/startTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/transparent_curved_button"
+                android:text="@string/start_time"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                android:typeface="serif"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/endTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mondayButton" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+            <Button
+                android:id="@+id/endTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/transparent_curved_button"
+                android:text="@string/end_time"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                android:typeface="serif"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/startTime"
+                app:layout_constraintTop_toBottomOf="@id/mondayButton" />
 
-                <Button
-                    android:id="@+id/startTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/transparent_curved_button"
-                    android:text="@string/start_time"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="16sp"
-                    android:typeface="serif" />
 
-                <Button
-                    android:id="@+id/endTime"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="12dp"
-                    android:layout_marginBottom="16dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/transparent_curved_button"
-                    android:text="@string/end_time"
-                    android:textColor="@color/primaryTextColor"
-                    android:textSize="16sp"
-                    android:typeface="serif" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 

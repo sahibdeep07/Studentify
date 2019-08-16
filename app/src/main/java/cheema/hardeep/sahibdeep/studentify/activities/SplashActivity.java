@@ -32,10 +32,8 @@ public class SplashActivity extends AppCompatActivity {
 
         new Handler().postDelayed(() -> {
             if(SharedPreferencesProvider.isFirstLaunch(SplashActivity.this)) {
-                //show userinformation
                 startActivity(new Intent(SplashActivity.this, UserInformationActivity.class));
             } else {
-                //home activity
                 startActivity(new Intent(SplashActivity.this, HomeActivity.class));
             }
             finish();
