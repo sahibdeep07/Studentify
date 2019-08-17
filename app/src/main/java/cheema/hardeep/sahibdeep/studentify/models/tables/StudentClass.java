@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey;
 import java.util.Date;
 import java.util.List;
 
+import static androidx.room.ForeignKey.CASCADE;
+
 @Entity
 public class StudentClass {
 

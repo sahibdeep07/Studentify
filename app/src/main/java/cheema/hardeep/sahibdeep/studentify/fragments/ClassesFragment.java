@@ -6,28 +6,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import cheema.hardeep.sahibdeep.studentify.R;
+import cheema.hardeep.sahibdeep.studentify.activities.HomeActivity;
+import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
+import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
+import cheema.hardeep.sahibdeep.studentify.models.TermDetails;
+import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class ClassesFragment extends Fragment {
 
     TextView universityName, semester;
-    Button addClassButton;
+    ImageView addClassButton;
     RecyclerView classDetailRV;
-
-    public ClassesFragment() {
-        // Required empty public constructor
-    }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,4 +40,17 @@ public class ClassesFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        String studentID = SharedPreferencesProvider.getStudentId(getContext());
+        UserInformation userInformation = StudentifyDatabaseProvider.getUserInformationDao(getContext()).getUserInformation(studentID);
+        String termName = userInformation.getTermName();
+        TermDetails termDetails = StudentifyDatabaseProvider.getTermDao(getContext()).getTermWithClasses(termName);
+}
 }

@@ -1,14 +1,14 @@
 package cheema.hardeep.sahibdeep.studentify.models;
 
 
-import androidx.room.Embedded;
-import androidx.room.Relation;
+        import androidx.room.Embedded;
+        import androidx.room.Relation;
 
-import java.util.ArrayList;
-import java.util.List;
+        import java.util.ArrayList;
+        import java.util.List;
 
-import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
-import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
+        import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
+        import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 
 public class TermDetails {
 

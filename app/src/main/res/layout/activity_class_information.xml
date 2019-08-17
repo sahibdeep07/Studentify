@@ -115,71 +115,74 @@
 
             <Button
                 android:id="@+id/mondayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="6dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/curved_square_button_white"
                 android:text="@string/mon"
+                app:layout_constraintEnd_toStartOf="@+id/tuesdayButton"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
             <Button
                 android:id="@+id/tuesdayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/curved_square_button_white"
                 android:text="@string/tue"
-                app:layout_constraintStart_toEndOf="@id/mondayButton"
+                app:layout_constraintEnd_toStartOf="@+id/wednesdayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mondayButton"
                 app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
             <Button
                 android:id="@+id/wednesdayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/curved_square_button_white"
                 android:text="@string/wed"
-                app:layout_constraintStart_toEndOf="@id/tuesdayButton"
+                app:layout_constraintEnd_toStartOf="@+id/thursdayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tuesdayButton"
                 app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
             <Button
                 android:id="@+id/thursdayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/curved_square_button_white"
                 android:text="@string/thu"
-                app:layout_constraintStart_toEndOf="@id/wednesdayButton"
+                app:layout_constraintEnd_toStartOf="@+id/fridayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/wednesdayButton"
                 app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
             <Button
                 android:id="@+id/fridayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/curved_square_button_white"
                 android:text="@string/fri"
-                app:layout_constraintStart_toEndOf="@id/thursdayButton"
+                app:layout_constraintEnd_toStartOf="@+id/saturdayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/thursdayButton"
                 app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
             <Button
                 android:id="@+id/saturdayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
-                android:layout_marginEnd="6dp"
-                android:layout_marginRight="6dp"
                 android:background="@drawable/curved_square_button_white"
                 android:text="@string/sat"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/fridayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/fridayButton"
                 app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
 

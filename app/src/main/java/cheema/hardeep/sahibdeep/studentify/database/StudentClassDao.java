@@ -35,4 +35,7 @@ public interface StudentClassDao {
 
     @Delete
     void deleteStudentClass(StudentClass studentClass);
+
+    @Query("DELETE FROM StudentClass")
+    void deleteAll();
 }
