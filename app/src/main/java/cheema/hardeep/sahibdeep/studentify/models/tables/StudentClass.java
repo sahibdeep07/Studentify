@@ -38,6 +38,18 @@ public class StudentClass {
     @ColumnInfo(name = "end_time")
     private Date endTime;
 
+    @ColumnInfo(name = "total_homework")
+    private int totalHomework;
+
+    @ColumnInfo(name = "pending_homework")
+    private int pendingHomework;
+
+    @ColumnInfo(name = "total_test")
+    private int totalTest;
+
+    @ColumnInfo(name = "pending_test")
+    private int pendingTest;
+
     public int getId() {
         return id;
     }
@@ -100,5 +112,37 @@ public class StudentClass {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public int getTotalHomework() {
+        return totalHomework;
+    }
+
+    public void setTotalHomework(int totalHomework) {
+        this.totalHomework = totalHomework;
+    }
+
+    public int getPendingHomework() {
+        return pendingHomework;
+    }
+
+    public void setPendingHomework(int pendingHomework) {
+        this.pendingHomework = pendingHomework;
+    }
+
+    public int getTotalTest() {
+        return totalTest;
+    }
+
+    public void setTotalTest(int totalTest) {
+        this.totalTest = totalTest;
+    }
+
+    public int getPendingTest() {
+        return pendingTest;
+    }
+
+    public void setPendingTest(int pendingTest) {
+        this.pendingTest = pendingTest;
     }
 }

@@ -3,19 +3,16 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
-import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.TermDetails;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
@@ -38,6 +35,7 @@ public class SplashActivity extends AppCompatActivity {
             }
             finish();
         }, TRANSITION_TIME);
+
 
         UserInformation userInformation = new UserInformation();
         userInformation.setName("Sandeep Kaur");

@@ -21,6 +21,9 @@ public interface StudentClassDao {
     @Query("SELECT * FROM StudentClass")
     List<StudentClass> getAllStudentClasses();
 
+    @Query("SELECT * FROM StudentClass WHERE id =:id")
+    StudentClass getStudentClass(int id);
+
     @Query("SELECT * FROM StudentClass WHERE term_id =:termId")
     List<StudentClass> getStudentClasses(int termId);
 

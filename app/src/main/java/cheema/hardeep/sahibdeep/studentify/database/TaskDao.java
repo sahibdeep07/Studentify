@@ -21,6 +21,9 @@ public interface TaskDao {
     @Query("SELECT * FROM Task")
     List<Task> getAllTasks();
 
+    @Query("SELECT * FROM Task WHERE id =:id")
+    Task getTask(int id);
+
     @Query("SELECT * FROM Task WHERE student_class_id =:studentClassId")
     List<Task> getTasks(int studentClassId);
 

@@ -14,7 +14,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.fragments.ClassesFragment;
-import cheema.hardeep.sahibdeep.studentify.fragments.ScheduleFragment;
 
 public class HomeActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
