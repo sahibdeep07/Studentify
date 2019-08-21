@@ -1,12 +1,15 @@
 package cheema.hardeep.sahibdeep.studentify.notifications;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
@@ -18,33 +21,68 @@ public class NotificationScheduler {
     public static final String KEY_STUDENT_CLASS_ID = "key-student-class-id";
     public static final String KEY_TASK_ID = "key-task-id";
 
+    private static final int STUDENT_CLASS_REMINDER_TIME_OFFSET = -15;
+    private static final int TASK_REMINDER_TIME_OFFSET = -1;
+    private static final int ONE_SECOND = 1000;
+    private static final int ONE_DAY_HOURS = 24;
+    private static final int SEVEN = 7;
+
     public static void scheduleClassNotification(Context context, StudentClass studentClass) {
+        Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling...");
         Data inputData = new Data.Builder().putInt(KEY_STUDENT_CLASS_ID, studentClass.getId()).build();
 
-        //Todo: Fix Time
+        long delay = calculateDelay(studentClass.getStartTime(), STUDENT_CLASS_REMINDER_TIME_OFFSET);
         PeriodicWorkRequest periodicWorkRequest =
                 new PeriodicWorkRequest
-                        .Builder(NotificationWorker.class, 7, TimeUnit.DAYS)
+                        .Builder(StudentifyWorker.class, SEVEN, TimeUnit.DAYS)
+                        .setInitialDelay(delay, TimeUnit.SECONDS)
                         .setInputData(inputData)
                         .addTag(NOTIFICATION_WORKER)
                         .build();
 
         WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(NOTIFICATION_WORKER, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
+        Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling Complete");
     }
 
     public static void scheduleTaskNotification(Context context, Task task) {
+        Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling...");
         Data inputData = new Data.Builder().putInt(KEY_TASK_ID, task.getId()).build();
 
         //Todo: Fix Time
         PeriodicWorkRequest periodicWorkRequest =
                 new PeriodicWorkRequest
-                        .Builder(NotificationWorker.class, 7, TimeUnit.DAYS)
+                        .Builder(StudentifyWorker.class, 7, TimeUnit.DAYS)
                         .setInputData(inputData)
                         .addTag(NOTIFICATION_WORKER)
                         .build();
 
         WorkManager.getInstance(context)
                 .enqueueUniquePeriodicWork(NOTIFICATION_WORKER, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
+        Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling Complete");
+    }
+
+    /**
+     * Worker runs with set intervals, for example everyday or every 7 days
+     * In order to ensure that work runs at specific time then after that keep running with 7 days delay in between
+     * we have to provide initial delay
+     * For example
+     * If current time is 5pm and we want to show notification 8pm every week on monday
+     * - We need to make sure we have initial day of 3 hours (calculated by startTime - currentTime)
+     * - Once that delay is over, the worker will run from that time every week
+     */
+    private static long calculateDelay(Date startTime, int offset) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startTime);
+        calendar.add(Calendar.MINUTE, offset);
+
+        long delta;
+        if (calendar.getTime().getTime() < System.currentTimeMillis()) {
+            delta = (calendar.getTimeInMillis() - System.currentTimeMillis()) / ONE_SECOND;
+        } else {
+            calendar.add(Calendar.HOUR, ONE_DAY_HOURS);
+            delta = (calendar.getTimeInMillis() - System.currentTimeMillis()) / ONE_SECOND;
+        }
+        return delta;
     }
 }

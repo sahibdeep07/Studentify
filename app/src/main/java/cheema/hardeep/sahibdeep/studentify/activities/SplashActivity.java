@@ -18,6 +18,7 @@ import cheema.hardeep.sahibdeep.studentify.models.TermDetails;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
+import cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler;
 
 public class SplashActivity extends AppCompatActivity {
     final static int TRANSITION_TIME = 2000;
@@ -115,5 +116,7 @@ public class SplashActivity extends AppCompatActivity {
             Log.d("HSING", "Student Classes with Term: " + studentClass.getName());
         }
         Log.d("HSING", "-------------------------------------------------------------------");
+
+        NotificationScheduler.scheduleClassNotification(this, studentClass1.getId());
     }
 }

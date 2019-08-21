@@ -1,6 +1,7 @@
 package cheema.hardeep.sahibdeep.studentify.notifications;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.work.Data;
@@ -14,17 +15,19 @@ import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import static cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler.KEY_STUDENT_CLASS_ID;
 import static cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler.KEY_TASK_ID;
 
-public class NotificationWorker extends Worker {
+public class StudentifyWorker extends Worker {
 
     private static final int NEGATIVE_ONE = -1;
 
-    public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
+    public StudentifyWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
     }
 
     @NonNull
     @Override
     public Result doWork() {
+//        Log.d(StudentifyWorker.class.getSimpleName(), "Work Initiated!");
+        Log.d("HSINGH", "Work Initiated!");
         Data inputData = getInputData();
         int classId = inputData.getInt(KEY_STUDENT_CLASS_ID, NEGATIVE_ONE);
         int taskId = inputData.getInt(KEY_TASK_ID, NEGATIVE_ONE);
@@ -34,6 +37,8 @@ public class NotificationWorker extends Worker {
         } else if (taskId != NEGATIVE_ONE) {
             handleTaskWork(taskId);
         }
+//        Log.d(StudentifyWorker.class.getSimpleName(), "Work Finished!");
+        Log.d("HSINGH", "Work Finished!");
         return Result.success();
     }
 
