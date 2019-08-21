@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 
@@ -58,6 +59,7 @@ public class NotificationHandler {
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
                 .setSmallIcon(iconId)
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true);
@@ -75,7 +77,11 @@ public class NotificationHandler {
     }
 
     private static PendingIntent generateTaskActivityPendingIntent(Context context) {
-        return PendingIntent.getActivity(context, 0, TasksActivity.createIntent(context), 0);
+        Intent homeActivityIntent = HomeActivity.createIntent(context);
+        homeActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
+        Intent taskActivityIntent = TasksActivity.createIntent(context);
+
+        return PendingIntent.getActivities(context, 0, new Intent[]{homeActivityIntent, taskActivityIntent}, 0);
     }
 
     private static String getClassNotificationBody(String professor, String roomNumber) {

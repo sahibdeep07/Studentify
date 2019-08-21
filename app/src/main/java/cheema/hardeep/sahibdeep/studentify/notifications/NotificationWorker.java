@@ -11,8 +11,8 @@ import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 
-import static cheema.hardeep.sahibdeep.studentify.notifications.NotificationSchedular.KEY_STUDENT_CLASS_ID;
-import static cheema.hardeep.sahibdeep.studentify.notifications.NotificationSchedular.KEY_TASK_ID;
+import static cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler.KEY_STUDENT_CLASS_ID;
+import static cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler.KEY_TASK_ID;
 
 public class NotificationWorker extends Worker {
 
