@@ -77,6 +77,7 @@ public class UserInformationActivity extends AppCompatActivity {
             userInformation = StudentifyDatabaseProvider
                     .getUserInformationDao(this)
                     .getUserInformation(SharedPreferencesProvider.getStudentId(this));
+            setUserInformation();
             clearTermButton.setVisibility(View.VISIBLE);
             setUserInformation();
         }
@@ -85,6 +86,7 @@ public class UserInformationActivity extends AppCompatActivity {
             UserInformation userInfo = getUserInformation();
             StudentifyDatabaseProvider.getUserInformationDao(this).insertUserInformation(userInfo);
             SharedPreferencesProvider.saveUserId(this, userInfo.getStudentId());
+            SharedPreferencesProvider.saveFirstLaunchCompleted(this);
             startActivity(HomeActivity.createIntent(UserInformationActivity.this));
         });
 
@@ -118,7 +120,12 @@ public class UserInformationActivity extends AppCompatActivity {
     public void setUserInformation(){
         if(userInformation != null){
             name.setText(userInformation.getName());
-            //TODO
+            collegeName.setText(userInformation.getCollegeName());
+            studentID.setText(userInformation.getStudentId());
+            phoneNumber.setText(userInformation.getPhoneNumber());
+            dob.setText(userInformation.getDateOfBirth());
+            address.setText(userInformation.getAddress());
+            term.setText(userInformation.getTermName());
         }
     }
 }

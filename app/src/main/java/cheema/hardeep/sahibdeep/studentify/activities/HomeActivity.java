@@ -39,8 +39,7 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
                 loadFragment(new ClassesFragment());
                 return true;
             case R.id.menu_schedule:
-//                loadFragment(new ScheduleFragment());
-                startActivity(ClassInformationActivity.createIntent(this));
+                loadFragment(new ScheduleFragment());
                 return true;
             case R.id.menu_user_information:
                 startActivity(UserInformationActivity.createIntent(this));
