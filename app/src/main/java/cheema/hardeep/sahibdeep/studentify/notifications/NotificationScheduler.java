@@ -5,6 +5,7 @@ import android.util.Log;
 
 import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
@@ -17,7 +18,8 @@ import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 
 public class NotificationScheduler {
 
-    private static final String NOTIFICATION_WORKER = "notification-worker";
+    private static final String NOTIFICATION_CLASS_WORKER = "notification-class-worker";
+    private static final String NOTIFICATION_TASK_WORKER = "notification-task-worker";
     public static final String KEY_STUDENT_CLASS_ID = "key-student-class-id";
     public static final String KEY_TASK_ID = "key-task-id";
 
@@ -37,11 +39,11 @@ public class NotificationScheduler {
                         .Builder(StudentifyWorker.class, SEVEN, TimeUnit.DAYS)
                         .setInitialDelay(delay, TimeUnit.SECONDS)
                         .setInputData(inputData)
-                        .addTag(NOTIFICATION_WORKER)
+                        .addTag(NOTIFICATION_CLASS_WORKER)
                         .build();
 
         WorkManager.getInstance(context)
-                .enqueueUniquePeriodicWork(NOTIFICATION_WORKER, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
+                .enqueueUniquePeriodicWork(NOTIFICATION_CLASS_WORKER, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
         Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling Complete");
     }
 
@@ -49,16 +51,16 @@ public class NotificationScheduler {
         Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling...");
         Data inputData = new Data.Builder().putInt(KEY_TASK_ID, task.getId()).build();
 
-        //Todo: Fix Time
-        PeriodicWorkRequest periodicWorkRequest =
-                new PeriodicWorkRequest
-                        .Builder(StudentifyWorker.class, 7, TimeUnit.DAYS)
+        long delay = calculateDelay(task.getDateTime(), TASK_REMINDER_TIME_OFFSET);
+        OneTimeWorkRequest oneTimeWorkRequest =
+                new OneTimeWorkRequest
+                        .Builder(StudentifyWorker.class)
+                        .setInitialDelay(delay, TimeUnit.SECONDS)
                         .setInputData(inputData)
-                        .addTag(NOTIFICATION_WORKER)
+                        .addTag(NOTIFICATION_TASK_WORKER)
                         .build();
 
-        WorkManager.getInstance(context)
-                .enqueueUniquePeriodicWork(NOTIFICATION_WORKER, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
+        WorkManager.getInstance(context).enqueue(oneTimeWorkRequest);
         Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling Complete");
     }
 
