@@ -4,24 +4,28 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import cheema.hardeep.sahibdeep.studentify.R;
-import cheema.hardeep.sahibdeep.studentify.fragments.ScheduleFragment;
+import cheema.hardeep.sahibdeep.studentify.interfaces.ScheduleInterface;
+import cheema.hardeep.sahibdeep.studentify.models.ScheduleDay;
 
-public class ScheduleDaysAdapter extends RecyclerView.Adapter<ScheduleDaysViewHolder> {
-    List<String> daysList = new ArrayList<>();
-    public static String selectedDay = new String();
+public class ScheduleDaysAdapter extends RecyclerView.Adapter<ScheduleDaysAdapter.ScheduleDaysViewHolder> {
 
-    public void updateDaysList(List<String> daysList){
-        this.daysList = daysList;
+    private List<ScheduleDay> scheduleDays = new ArrayList<>();
+    private ScheduleInterface scheduleInterface;
+
+    public ScheduleDaysAdapter(ScheduleInterface scheduleInterface) {
+        this.scheduleInterface = scheduleInterface;
+    }
+
+    public void updateDaysList(List<ScheduleDay> scheduleDays) {
+        this.scheduleDays = scheduleDays;
         notifyDataSetChanged();
     }
 
@@ -34,30 +38,27 @@ public class ScheduleDaysAdapter extends RecyclerView.Adapter<ScheduleDaysViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ScheduleDaysViewHolder holder, int position) {
-        String d = daysList.get(position);
-        holder.day.setText(d);
-        holder.view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectedDay = holder.day.getText().toString();
-                Toast.makeText(v.getContext(), ""+holder.day.getText(), Toast.LENGTH_SHORT).show();
-            }
-        });
+        ScheduleDay scheduleDay = scheduleDays.get(position);
+        holder.day.setText(scheduleDay.getDay());
+        holder.date.setText(String.valueOf(scheduleDay.getDate()));
+        holder.itemView.setOnClickListener(v -> scheduleInterface.onDaySelected(scheduleDay.getDay()));
     }
 
     @Override
     public int getItemCount() {
-        return daysList.size();
+        return scheduleDays.size();
     }
-}
 
-class ScheduleDaysViewHolder extends RecyclerView.ViewHolder{
-    TextView day, date;
-    ConstraintLayout view;
-    public ScheduleDaysViewHolder(@NonNull View itemView) {
-        super(itemView);
-        date = itemView.findViewById(R.id.date);
-        day = itemView.findViewById(R.id.day);
-        view = itemView.findViewById(R.id.scheduleDaysView);
+    class ScheduleDaysViewHolder extends RecyclerView.ViewHolder {
+        TextView day;
+        TextView date;
+        View itemView;
+
+        ScheduleDaysViewHolder(@NonNull View itemView) {
+            super(itemView);
+            date = itemView.findViewById(R.id.date);
+            day = itemView.findViewById(R.id.day);
+            this.itemView = itemView;
+        }
     }
 }

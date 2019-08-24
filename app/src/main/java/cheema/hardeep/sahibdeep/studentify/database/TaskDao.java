@@ -21,11 +21,14 @@ public interface TaskDao {
     @Query("SELECT * FROM Task")
     List<Task> getAllTasks();
 
+    @Query("SELECT * FROM Task WHERE id =:taskId")
+    Task getTask(int taskId);
+
     @Query("SELECT * FROM Task WHERE student_class_id =:studentClassId")
     List<Task> getTasks(int studentClassId);
 
     @Query("SELECT * FROM Task WHERE student_class_id =:studentClassId AND type=:taskType")
-    List<Task> getTaskWithType(int studentClassId, TaskType taskType);
+    List<Task> getTaskWithType(int studentClassId, String taskType);
 
     @Update
     int upddateTask(Task task);

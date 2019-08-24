@@ -6,22 +6,41 @@
     android:layout_height="match_parent"
     tools:context=".activities.TasksDetailsActivity">
 
-    <TextView
-        android:id="@+id/taskDetailsHeader"
+    <Button
+        android:id="@+id/taskCancelButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:paddingStart="12dp"
-        android:paddingTop="24dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="4dp"
-        android:text="@string/task_details"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/curved_button_blue"
+        android:elevation="8dp"
+        android:shadowColor="@android:color/darker_gray"
+        android:text="@string/cancel"
         android:textColor="@color/primaryTextColor"
-        android:textSize="24sp"
+        android:textSize="16sp"
         android:typeface="serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/taskAddButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/taskAddButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/curved_button_blue"
+        android:elevation="8dp"
+        android:shadowColor="@android:color/darker_gray"
+        android:text="@string/add"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="16sp"
+        android:typeface="serif"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@id/taskCancelButton" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -61,95 +80,25 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <Button
-                android:id="@+id/taskMondayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/mon"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/taskNameContainer" />
-
-            <Button
-                android:id="@+id/taskTuesdayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/tue"
-                app:layout_constraintStart_toEndOf="@id/taskMondayButton"
-                app:layout_constraintTop_toBottomOf="@id/taskNameContainer" />
-
-            <Button
-                android:id="@+id/taskWednesdayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/wed"
-                app:layout_constraintStart_toEndOf="@id/taskTuesdayButton"
-                app:layout_constraintTop_toBottomOf="@id/taskNameContainer" />
-
-            <Button
-                android:id="@+id/taskThursdayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/thu"
-                app:layout_constraintStart_toEndOf="@id/taskWednesdayButton"
-                app:layout_constraintTop_toBottomOf="@id/taskNameContainer" />
-
-            <Button
-                android:id="@+id/taskFridayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/fri"
-                app:layout_constraintStart_toEndOf="@id/taskThursdayButton"
-                app:layout_constraintTop_toBottomOf="@id/taskNameContainer" />
-
-            <Button
-                android:id="@+id/taskSaturdayButton"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="6dp"
-                android:layout_marginRight="6dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/sat"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/taskFridayButton"
-                app:layout_constraintTop_toBottomOf="@id/taskNameContainer" />
-
-
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/timeContainer"
+                android:id="@+id/dateContainer"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
-                android:hint="@string/time"
+                android:hint="@string/date_time"
                 android:textColorHint="@color/primaryTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/taskMondayButton">
+                app:layout_constraintTop_toBottomOf="@id/taskNameContainer">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/time"
+                    android:id="@+id/date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="time"
+                    android:inputType="datetime"
                     android:textColor="@color/primaryTextColor"
                     android:typeface="serif" />
 
@@ -168,7 +117,7 @@
                 android:textColorHint="@color/primaryTextColor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/timeContainer">
+                app:layout_constraintTop_toBottomOf="@id/dateContainer">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/notes"
@@ -186,41 +135,22 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
-    <Button
-        android:id="@+id/taskCancelButton"
+    <TextView
+        android:id="@+id/taskDetailsHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/curved_button_blue"
-        android:elevation="8dp"
-        android:shadowColor="@android:color/darker_gray"
-        android:text="@string/cancel"
+        android:background="@color/colorPrimary"
+        android:paddingStart="12dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="4dp"
+        android:text="@string/task_details"
         android:textColor="@color/primaryTextColor"
-        android:textSize="16sp"
+        android:textSize="24sp"
         android:typeface="serif"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/taskAddButton"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/taskAddButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/curved_button_blue"
-        android:elevation="8dp"
-        android:shadowColor="@android:color/darker_gray"
-        android:text="@string/add"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="16sp"
-        android:typeface="serif"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/taskCancelButton" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

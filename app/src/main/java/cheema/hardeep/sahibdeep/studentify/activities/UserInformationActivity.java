@@ -2,9 +2,7 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,12 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Date;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
-import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
@@ -32,7 +32,7 @@ public class UserInformationActivity extends AppCompatActivity {
     public static final String EVEN_SEMESTER = "Even Semester";
     public static final String ODD_SEMESTER = "Odd Semester";
 
-    CharSequence[] termItems = new CharSequence[] {EVEN_SEMESTER, ODD_SEMESTER};
+    CharSequence[] termItems = new CharSequence[]{EVEN_SEMESTER, ODD_SEMESTER};
 
     @BindView(R.id.name)
     TextInputEditText name;
@@ -73,7 +73,7 @@ public class UserInformationActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         ButterKnife.bind(this);
 
-        if(!SharedPreferencesProvider.isFirstLaunch(this)){
+        if (!SharedPreferencesProvider.isFirstLaunch(this)) {
             userInformation = StudentifyDatabaseProvider
                     .getUserInformationDao(this)
                     .getUserInformation(SharedPreferencesProvider.getStudentId(this));
@@ -85,6 +85,7 @@ public class UserInformationActivity extends AppCompatActivity {
         saveButton.setOnClickListener(v -> {
             UserInformation userInfo = getUserInformation();
             StudentifyDatabaseProvider.getUserInformationDao(this).insertUserInformation(userInfo);
+            StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
             SharedPreferencesProvider.saveUserId(this, userInfo.getStudentId());
             SharedPreferencesProvider.saveFirstLaunchCompleted(this);
             startActivity(HomeActivity.createIntent(UserInformationActivity.this));
@@ -93,7 +94,7 @@ public class UserInformationActivity extends AppCompatActivity {
         clearTermButton.setOnClickListener(v -> clearTerm());
 
         termContainer.setOnClickListener(v -> DialogUtil.createTermDialog(v.getContext(), termItems, (dialog, which) -> {
-            int selectedPosition = ((AlertDialog)dialog).getListView().getCheckedItemPosition();
+            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
             term.setText(termItems[selectedPosition]);
         }));
 
@@ -105,7 +106,8 @@ public class UserInformationActivity extends AppCompatActivity {
         StudentifyDatabaseProvider.getStudentClassDao(this).deleteAll();
     }
 
-    public UserInformation getUserInformation(){
+    //TODO: Validations
+    public UserInformation getUserInformation() {
         UserInformation userInformation = new UserInformation();
         userInformation.setName(name.getText().toString());
         userInformation.setCollegeName(collegeName.getText().toString());
@@ -117,8 +119,17 @@ public class UserInformationActivity extends AppCompatActivity {
         return userInformation;
     }
 
-    public void setUserInformation(){
-        if(userInformation != null){
+    //TODO: Duration of Term
+    public Term getTerm(String termName) {
+        Term term = new Term();
+        term.setName(termName);
+        term.setStartDate(new Date());
+        term.setEndDate(new Date());
+        return term;
+    }
+
+    public void setUserInformation() {
+        if (userInformation != null) {
             name.setText(userInformation.getName());
             collegeName.setText(userInformation.getCollegeName());
             studentID.setText(userInformation.getStudentId());

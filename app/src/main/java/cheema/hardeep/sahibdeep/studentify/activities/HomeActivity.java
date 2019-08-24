@@ -52,5 +52,4 @@ public class HomeActivity extends AppCompatActivity implements BottomNavigationV
         FragmentManager manager = getSupportFragmentManager();
         manager.beginTransaction().replace(R.id.fragmentContainer, fragment).commit();
     }
-
 }

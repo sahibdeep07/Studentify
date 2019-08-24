@@ -3,55 +3,47 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
-import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
-import cheema.hardeep.sahibdeep.studentify.utils.TimeDialog;
+import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class TasksDetailsActivity extends AppCompatActivity {
-    public static boolean isHomework;
 
-    public static Intent createIntent(Context context, boolean homework){
-        isHomework = homework;
-        return new Intent(context, TasksDetailsActivity.class);
+    public static final int NEGATIVE_TASK_ID = -1;
+    public static final int DEFAULT_CLASS_ID = 0;
+    public static final String KEY_IS_HOMEWORK = "key-is-homework";
+    public static final String KEY_CLASS_ID = "key-class-id";
+    public static final String KEY_TASK_ID = "key-task-id";
+    public static final String DATE_TIME_FORMAT = "MMM dd, YYYY HH:MM";
+
+    public static Intent createIntent(Context context, boolean homework, int classId, int taskId) {
+        Intent intent = new Intent(context, TasksDetailsActivity.class);
+        intent.putExtra(KEY_IS_HOMEWORK, homework);
+        intent.putExtra(KEY_CLASS_ID, classId);
+        intent.putExtra(KEY_TASK_ID, taskId);
+        return intent;
     }
 
     @BindView(R.id.taskName)
     TextInputEditText taskName;
 
-    @BindView(R.id.taskMondayButton)
-    Button mondayButton;
-
-    @BindView(R.id.taskTuesdayButton)
-    Button tuesdayButton;
-
-    @BindView(R.id.taskWednesdayButton)
-    Button wednesdayButton;
-
-    @BindView(R.id.taskThursdayButton)
-    Button thursdayButton;
-
-    @BindView(R.id.taskFridayButton)
-    Button fridayButton;
-
-    @BindView(R.id.taskSaturdayButton)
-    Button saturdayButton;
-
-    @BindView(R.id.time)
+    @BindView(R.id.date)
     TextInputEditText time;
 
     @BindView(R.id.notes)
@@ -63,7 +55,10 @@ public class TasksDetailsActivity extends AppCompatActivity {
     @BindView(R.id.taskCancelButton)
     Button cancelButton;
 
-    Task task;
+    int taskId;
+    int classId;
+    TaskType taskType;
+    Calendar userDateTime = Calendar.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,114 +67,59 @@ public class TasksDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         getSupportActionBar().hide();
 
+        Intent intent = getIntent();
+        taskType = intent.getBooleanExtra(KEY_IS_HOMEWORK, false) ? TaskType.HOMEWORK : TaskType.TEST;
+        taskId = intent.getIntExtra(KEY_TASK_ID, NEGATIVE_TASK_ID);
+        classId = intent.getIntExtra(KEY_CLASS_ID, DEFAULT_CLASS_ID);
+        if (taskId != NEGATIVE_TASK_ID) setTaskData();
+
         cancelButton.setOnClickListener(v -> finish());
         addButton.setOnClickListener(v -> {
-            StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(getTask());
+            if (taskId == NEGATIVE_TASK_ID) {
+                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(getTask());
+            } else {
+                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).upddateTask(getTask());
+            }
             finish();
         });
-        mondayButton.setOnClickListener(v -> handleMondayButton());
-        tuesdayButton.setOnClickListener(v -> handleTuesdayButton());
-        wednesdayButton.setOnClickListener(v -> handleWednesdayButton());
-        thursdayButton.setOnClickListener(v -> handleThursdayButton());
-        fridayButton.setOnClickListener(v -> handleFridayButton());
-        saturdayButton.setOnClickListener(v -> handleSaturdayButton());
-        time.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TimeDialog.createTimeDialog(TasksDetailsActivity.this);
-            }
+
+        time.setOnClickListener(v -> {
+            userDateTime = Calendar.getInstance();
+            DialogUtil.createDateDialog(this, (datePicker, year, month, dayOfMonth) -> {
+                userDateTime.set(Calendar.YEAR, year);
+                userDateTime.set(Calendar.MONTH, month);
+                userDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                DialogUtil.createTimeDialog(TasksDetailsActivity.this, (timePicker, hour, minute) -> {
+                    userDateTime.set(Calendar.HOUR, hour);
+                    userDateTime.set(Calendar.MINUTE, minute);
+                    formatDisplayDateTime();
+                });
+            });
         });
     }
 
-    public Task getTask(){
-        task = new Task();
+    private void formatDisplayDateTime() {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
+        time.setText(sdf.format(userDateTime.getTime()));
+    }
+
+    public Task getTask() {
+        Task task = new Task();
         task.setName(taskName.getText().toString());
         task.setNotes(notes.getText().toString());
-        task.setDateTime(new Date());
-        if(isHomework) task.setType(TaskType.HOMEWORK);
-        else task.setType(TaskType.TEST);
-        task.setStudentClassId(Integer.parseInt(SharedPreferencesProvider.getStudentId(TasksDetailsActivity.this)));
+        task.setDateTime(userDateTime.getTime());
+        task.setType(taskType);
+        task.setStudentClassId(classId);
         return task;
     }
 
-    // TODO: 23-08-2019  
-//    public void setTask(){
-//        task = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).get
-//        taskName.setText();
-//        notes.setText();
-//        time.setText();
-//    }
-
-    public void handleMondayButton(){
-        if (!mondayButton.isSelected()) {
-            mondayButton.setBackground(getDrawable(R.drawable.transparent_curved_button));
-            mondayButton.setTextColor(mondayButton.getResources().getColor(R.color.primaryTextColor));
-            mondayButton.setSelected(true);
-        } else if (mondayButton.isSelected()) {
-            mondayButton.setBackground(getDrawable(R.drawable.curved_square_button_white));
-            mondayButton.setTextColor(mondayButton.getResources().getColor(R.color.secondaryTextColor));
-            mondayButton.setSelected(false);
-        }
+    public void setTaskData() {
+        Task task = StudentifyDatabaseProvider.getTaskDao(this).getTask(taskId);
+        taskName.setText(task.getName());
+        notes.setText(task.getNotes());
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(task.getDateTime().getTime());
+        userDateTime = calendar;
+        formatDisplayDateTime();
     }
-
-    private void handleSaturdayButton() {
-        if (!saturdayButton.isSelected()) {
-            saturdayButton.setBackground(getDrawable(R.drawable.transparent_curved_button));
-            saturdayButton.setTextColor(saturdayButton.getResources().getColor(R.color.primaryTextColor));
-            saturdayButton.setSelected(true);
-        } else if (saturdayButton.isSelected()) {
-            saturdayButton.setBackground(getDrawable(R.drawable.curved_square_button_white));
-            saturdayButton.setTextColor(saturdayButton.getResources().getColor(R.color.secondaryTextColor));
-            saturdayButton.setSelected(false);
-        }
-    }
-
-    private void handleFridayButton() {
-        if (!fridayButton.isSelected()) {
-            fridayButton.setBackground(getDrawable(R.drawable.transparent_curved_button));
-            fridayButton.setTextColor(fridayButton.getResources().getColor(R.color.primaryTextColor));
-            fridayButton.setSelected(true);
-        } else if (fridayButton.isSelected()) {
-            fridayButton.setBackground(getDrawable(R.drawable.curved_square_button_white));
-            fridayButton.setTextColor(fridayButton.getResources().getColor(R.color.secondaryTextColor));
-            fridayButton.setSelected(false);
-        }
-    }
-
-    private void handleThursdayButton() {
-        if (!thursdayButton.isSelected()) {
-            thursdayButton.setBackground(getDrawable(R.drawable.transparent_curved_button));
-            thursdayButton.setTextColor(thursdayButton.getResources().getColor(R.color.primaryTextColor));
-            thursdayButton.setSelected(true);
-        } else if (thursdayButton.isSelected()) {
-            thursdayButton.setBackground(getDrawable(R.drawable.curved_square_button_white));
-            thursdayButton.setTextColor(thursdayButton.getResources().getColor(R.color.secondaryTextColor));
-            thursdayButton.setSelected(false);
-        }
-    }
-
-    private void handleWednesdayButton() {
-        if (!wednesdayButton.isSelected()) {
-            wednesdayButton.setBackground(getDrawable(R.drawable.transparent_curved_button));
-            wednesdayButton.setTextColor(wednesdayButton.getResources().getColor(R.color.primaryTextColor));
-            wednesdayButton.setSelected(true);
-        } else if (wednesdayButton.isSelected()) {
-            wednesdayButton.setBackground(getDrawable(R.drawable.curved_square_button_white));
-            wednesdayButton.setTextColor(wednesdayButton.getResources().getColor(R.color.secondaryTextColor));
-            wednesdayButton.setSelected(false);
-        }
-    }
-
-    private void handleTuesdayButton() {
-        if (!tuesdayButton.isSelected()) {
-            tuesdayButton.setBackground(getDrawable(R.drawable.transparent_curved_button));
-            tuesdayButton.setTextColor(tuesdayButton.getResources().getColor(R.color.primaryTextColor));
-            tuesdayButton.setSelected(true);
-        } else if (tuesdayButton.isSelected()) {
-            tuesdayButton.setBackground(getDrawable(R.drawable.curved_square_button_white));
-            tuesdayButton.setTextColor(tuesdayButton.getResources().getColor(R.color.secondaryTextColor));
-            tuesdayButton.setSelected(false);
-        }
-    }
-
 }
