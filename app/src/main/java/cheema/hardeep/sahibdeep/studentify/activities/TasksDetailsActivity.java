@@ -21,6 +21,7 @@ import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
+import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class TasksDetailsActivity extends AppCompatActivity {
@@ -92,15 +93,10 @@ public class TasksDetailsActivity extends AppCompatActivity {
                 DialogUtil.createTimeDialog(TasksDetailsActivity.this, (timePicker, hour, minute) -> {
                     userDateTime.set(Calendar.HOUR, hour);
                     userDateTime.set(Calendar.MINUTE, minute);
-                    formatDisplayDateTime();
+                    time.setText(DateUtils.formatDisplayDateTime(userDateTime));
                 });
             });
         });
-    }
-
-    private void formatDisplayDateTime() {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
-        time.setText(sdf.format(userDateTime.getTime()));
     }
 
     public Task getTask() {
@@ -120,6 +116,6 @@ public class TasksDetailsActivity extends AppCompatActivity {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(task.getDateTime().getTime());
         userDateTime = calendar;
-        formatDisplayDateTime();
+        time.setText(DateUtils.formatDisplayDateTime(userDateTime));
     }
 }

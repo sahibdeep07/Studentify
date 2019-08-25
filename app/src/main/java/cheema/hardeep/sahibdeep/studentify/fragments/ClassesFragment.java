@@ -18,7 +18,7 @@ import cheema.hardeep.sahibdeep.studentify.activities.ClassInformationActivity;
 import cheema.hardeep.sahibdeep.studentify.adapters.ClassAdapter;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ClassesInterface;
-import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtils;
+import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 
 public class ClassesFragment extends Fragment implements ClassesInterface {
 
@@ -43,7 +43,8 @@ public class ClassesFragment extends Fragment implements ClassesInterface {
 
         addClassButton.setOnClickListener(v -> startActivity(ClassInformationActivity.createIntent(view.getContext())));
         classDetailRV.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        classAdapter = new ClassAdapter();
+        classAdapter = new ClassAdapter(false);
+        classAdapter.setClassesInterface(this);
         classDetailRV.setAdapter(classAdapter);
         return view;
     }
@@ -51,15 +52,14 @@ public class ClassesFragment extends Fragment implements ClassesInterface {
     @Override
     public void onResume() {
         super.onResume();
-        String termName = DatabaseUtils.getUserInformation(getContext()).getTermName();
-        universityName.setText(DatabaseUtils.getUserInformation(getContext()).getCollegeName());
-        semester.setText(termName);
-        classAdapter.updateList(StudentifyDatabaseProvider.getTermDao(getContext()).getTermWithClasses(termName).getStudentClasses());
+        universityName.setText(DatabaseUtil.getUserInformation(getContext()).getCollegeName());
+        refreshClasses();
     }
 
     @Override
     public void refreshClasses() {
-        String termName = DatabaseUtils.getUserInformation(getContext()).getTermName();
+        String termName = DatabaseUtil.getUserInformation(getContext()).getTermName();
+        semester.setText(termName);
         classAdapter.updateList(StudentifyDatabaseProvider
                 .getTermDao(getContext())
                 .getTermWithClasses(termName)

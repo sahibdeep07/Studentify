@@ -7,7 +7,7 @@ import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
 
-public class DatabaseUtils {
+public class DatabaseUtil {
 
     private static String getUserId(Context context) {
         return SharedPreferencesProvider.getStudentId(context);

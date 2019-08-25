@@ -24,7 +24,7 @@ import cheema.hardeep.sahibdeep.studentify.adapters.ScheduleDaysAdapter;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ScheduleInterface;
 import cheema.hardeep.sahibdeep.studentify.models.ScheduleDay;
-import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtils;
+import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,7 +53,7 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
         View view = inflater.inflate(R.layout.fragment_schedule, container, false);
         ButterKnife.bind(this, view);
 
-        semester.setText(DatabaseUtils.getUserInformation(getContext()).getTermName());
+        semester.setText(DatabaseUtil.getUserInformation(getContext()).getTermName());
 
         daysRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         daysAdapter = new ScheduleDaysAdapter(this);
@@ -61,7 +61,7 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
         daysRecyclerView.setAdapter(daysAdapter);
 
         classesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
-        classAdapter = new ClassAdapter();
+        classAdapter = new ClassAdapter(true);
         classesRecyclerView.setAdapter(classAdapter);
 
         return view;

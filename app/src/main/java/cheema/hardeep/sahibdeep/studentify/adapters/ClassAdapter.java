@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -16,16 +15,26 @@ import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.activities.TasksActivity;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ClassesInterface;
-import cheema.hardeep.sahibdeep.studentify.interfaces.ScheduleInterface;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHolder> {
 
     private static final String NONE = "None";
+    private static final String HYPEN = "-";
+    private boolean isSchedule;
 
     private List<StudentClass> studentClassList = new ArrayList<>();
-    private ClassesInterface classesInterface ;
+    private ClassesInterface classesInterface;
+
+    public ClassAdapter(boolean isSchedule) {
+        this.isSchedule = isSchedule;
+    }
+
+    public void setClassesInterface(ClassesInterface classesInterface) {
+        this.classesInterface = classesInterface;
+    }
 
     public void updateList(List<StudentClass> studentClassList) {
         this.studentClassList = studentClassList;
@@ -45,23 +54,27 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         holder.classTitle.setText(studentClass.getName());
         holder.professorName.setText(studentClass.getProfessorName());
         holder.roomNumber.setText(studentClass.getRoomNumber());
-        holder.time.setText(NONE);
+        holder.time.setText(getStartEndDisplayTime(studentClass));
         holder.test.setText(NONE);
         holder.homework.setText(NONE);
         holder.itemView.setOnClickListener(v ->
                 v.getContext().startActivity(TasksActivity.createIntent(v.getContext(), studentClass.getId()))
         );
-        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
+
+        if (!isSchedule) {
+            holder.itemView.setOnLongClickListener(v -> {
                 DialogUtil.createDeleteConfirmationDialog(v.getContext(),
                         (dialogInterface, i) -> {
-                    StudentifyDatabaseProvider.getStudentClassDao(v.getContext()).deleteStudentClass(studentClass);
-                     classesInterface.refreshClasses();
+                            StudentifyDatabaseProvider.getStudentClassDao(v.getContext()).deleteStudentClass(studentClass);
+                            if (classesInterface != null) classesInterface.refreshClasses();
                         });
                 return true;
-            }
-        });
+            });
+        }
+    }
+
+    private String getStartEndDisplayTime(StudentClass studentClass) {
+        return DateUtils.formatDisplayTime(studentClass.getStartTime()) + HYPEN + DateUtils.formatDisplayTime(studentClass.getEndTime());
     }
 
     @Override

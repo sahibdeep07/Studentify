@@ -3,7 +3,6 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,24 +11,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
-import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtils;
+import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
+import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class ClassInformationActivity extends AppCompatActivity {
-
-    public static final String TIME_FORMAT = "hh:mm";
 
     public static Intent createIntent(Context context) {
         return new Intent(context, ClassInformationActivity.class);
@@ -111,7 +106,7 @@ public class ClassInformationActivity extends AppCompatActivity {
             DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
                 startTimeCalendar.set(Calendar.HOUR, hour);
                 startTimeCalendar.set(Calendar.MINUTE, minute);
-                formatDisplayTime(startTime, startTimeCalendar);
+                startTime.setText(DateUtils.formatDisplayTime(startTimeCalendar));
             });
         });
         endTime.setOnClickListener(v -> {
@@ -119,7 +114,7 @@ public class ClassInformationActivity extends AppCompatActivity {
             DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
                 endTimeCalendar.set(Calendar.HOUR, hour);
                 endTimeCalendar.set(Calendar.MINUTE, minute);
-                formatDisplayTime(endTime, endTimeCalendar);
+                endTime.setText(DateUtils.formatDisplayTime(endTimeCalendar));
             });
         });
     }
@@ -138,11 +133,6 @@ public class ClassInformationActivity extends AppCompatActivity {
         }
     }
 
-    private void formatDisplayTime(TextView textView, Calendar time) {
-        SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT, Locale.US);
-        textView.setText(sdf.format(time.getTime()));
-    }
-
     public StudentClass getClassDetails() {
         StudentClass studentClass = new StudentClass();
         studentClass.setName(className.getText().toString());
@@ -151,7 +141,7 @@ public class ClassInformationActivity extends AppCompatActivity {
         studentClass.setDays((daysList));
         studentClass.setStartTime(startTimeCalendar.getTime());
         studentClass.setEndTime(endTimeCalendar.getTime());
-        studentClass.setTermId(DatabaseUtils.getUserTerm(this).getId());
+        studentClass.setTermId(DatabaseUtil.getUserTerm(this).getId());
         return studentClass;
     }
 
