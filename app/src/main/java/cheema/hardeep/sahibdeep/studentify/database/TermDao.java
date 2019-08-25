@@ -32,4 +32,7 @@ public interface TermDao {
 
     @Delete
     void deleteTerm(Term term);
+
+    @Query("DELETE FROM Term")
+    void deleteAll();
 }
