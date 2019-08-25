@@ -7,8 +7,8 @@ import java.util.Locale;
 
 public class DateUtils {
 
-    private static final String TIME_FORMAT = "hh:mm";
-    private static final String DATE_TIME_FORMAT = "MMM dd, YYYY hh:mm";
+    private static final String TIME_FORMAT = "hh:mm a";
+    private static final String DATE_TIME_FORMAT = "MMM dd, YYYY hh:mm a";
 
     public static String formatDisplayTime(Calendar time) {
         SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT, Locale.US);
@@ -23,5 +23,10 @@ public class DateUtils {
     public static String formatDisplayDateTime(Calendar time) {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
         return sdf.format(time.getTime());
+    }
+
+    public static String formatDisplayDateTime(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_FORMAT, Locale.US);
+        return sdf.format(date.getTime());
     }
 }

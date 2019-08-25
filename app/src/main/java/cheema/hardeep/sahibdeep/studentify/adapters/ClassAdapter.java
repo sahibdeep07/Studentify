@@ -22,7 +22,7 @@ import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHolder> {
 
     private static final String NONE = "None";
-    private static final String HYPEN = "-";
+    private static final String HYPEN = " - ";
     private boolean isSchedule;
 
     private List<StudentClass> studentClassList = new ArrayList<>();

@@ -16,6 +16,7 @@ import cheema.hardeep.sahibdeep.studentify.activities.TasksDetailsActivity;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ViewRefreshInterface;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
+import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
@@ -45,7 +46,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
         Task task = testList.get(position);
         holder.name.setText(task.getName());
-        holder.time.setText(task.getDateTime().toString());
+        holder.time.setText(DateUtils.formatDisplayDateTime(task.getDateTime()));
         holder.itemView.setOnClickListener(v -> TasksDetailsActivity.createIntent(v.getContext(), isHomework, task.getStudentClassId(), task.getId()));
 
         holder.itemView.setOnLongClickListener(view -> {
