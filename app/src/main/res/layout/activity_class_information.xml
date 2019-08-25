@@ -6,23 +6,46 @@
     android:layout_height="match_parent"
     tools:context=".activities.ClassInformationActivity">
 
-    <TextView
-        android:id="@+id/classInformationHeader"
+    <Button
+        android:id="@+id/cancelButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
-        android:paddingStart="12dp"
-        android:paddingTop="24dp"
-        android:paddingEnd="12dp"
-        android:paddingBottom="4dp"
-        android:text="@string/class_information"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/curved_button_blue"
+        android:elevation="8dp"
+        android:shadowColor="@android:color/darker_gray"
+        android:text="@string/cancel"
         android:textColor="@color/primaryTextColor"
-        android:textSize="24sp"
+        android:textSize="16sp"
         android:typeface="serif"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/addButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/classInfoScrollView"
+        app:layout_constraintVertical_bias="1.0" />
 
+
+    <Button
+        android:id="@+id/addButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/curved_button_blue"
+        android:elevation="8dp"
+        android:shadowColor="@android:color/darker_gray"
+        android:text="@string/add"
+        android:textColor="@color/primaryTextColor"
+        android:textSize="16sp"
+        android:typeface="serif"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/cancelButton"
+        app:layout_constraintTop_toBottomOf="@id/classInfoScrollView"
+        app:layout_constraintVertical_bias="1.0" />
 
     <ScrollView
         android:id="@+id/classInfoScrollView"
@@ -36,6 +59,118 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
+            <Button
+                android:id="@+id/mondayButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/mon"
+                app:layout_constraintEnd_toStartOf="@+id/tuesdayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
+
+            <Button
+                android:id="@+id/tuesdayButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/tue"
+                app:layout_constraintEnd_toStartOf="@+id/wednesdayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mondayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
+
+            <Button
+                android:id="@+id/wednesdayButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/wed"
+                app:layout_constraintEnd_toStartOf="@+id/thursdayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/tuesdayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
+
+
+            <Button
+                android:id="@+id/thursdayButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/thu"
+                app:layout_constraintEnd_toStartOf="@+id/fridayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/wednesdayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
+
+            <Button
+                android:id="@+id/fridayButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/fri"
+                app:layout_constraintEnd_toStartOf="@+id/saturdayButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/thursdayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
+
+            <Button
+                android:id="@+id/saturdayButton"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/curved_square_button_white"
+                android:text="@string/sat"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/fridayButton"
+                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
+
+            <TextView
+                android:id="@+id/startTime"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/transparent_curved_button"
+                android:gravity="center"
+                android:text="@string/start_time"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                android:typeface="serif"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/endTime"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/mondayButton" />
+
+            <TextView
+                android:id="@+id/endTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="12dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/transparent_curved_button"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="@string/end_time"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                android:typeface="serif"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/startTime"
+                app:layout_constraintTop_toBottomOf="@id/mondayButton" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/classNameContainer"
@@ -61,6 +196,7 @@
                     android:typeface="serif" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/professorNameContainer"
@@ -113,159 +249,26 @@
             </com.google.android.material.textfield.TextInputLayout>
 
 
-            <Button
-                android:id="@+id/mondayButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/mon"
-                app:layout_constraintEnd_toStartOf="@+id/tuesdayButton"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
-
-            <Button
-                android:id="@+id/tuesdayButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/tue"
-                app:layout_constraintEnd_toStartOf="@+id/wednesdayButton"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/mondayButton"
-                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
-
-            <Button
-                android:id="@+id/wednesdayButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/wed"
-                app:layout_constraintEnd_toStartOf="@+id/thursdayButton"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/tuesdayButton"
-                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
-
-            <Button
-                android:id="@+id/thursdayButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/thu"
-                app:layout_constraintEnd_toStartOf="@+id/fridayButton"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/wednesdayButton"
-                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
-
-            <Button
-                android:id="@+id/fridayButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/fri"
-                app:layout_constraintEnd_toStartOf="@+id/saturdayButton"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/thursdayButton"
-                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
-
-            <Button
-                android:id="@+id/saturdayButton"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/curved_square_button_white"
-                android:text="@string/sat"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/fridayButton"
-                app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
-
-
-            <Button
-                android:id="@+id/startTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/transparent_curved_button"
-                android:text="@string/start_time"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="16sp"
-                android:typeface="serif"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/endTime"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/mondayButton" />
-
-            <Button
-                android:id="@+id/endTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/transparent_curved_button"
-                android:text="@string/end_time"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="16sp"
-                android:typeface="serif"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/startTime"
-                app:layout_constraintTop_toBottomOf="@id/mondayButton" />
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 
-    <Button
-        android:id="@+id/cancelButton"
+    <TextView
+        android:id="@+id/classInformationHeader"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/curved_button_blue"
-        android:elevation="8dp"
-        android:shadowColor="@android:color/darker_gray"
-        android:text="@string/cancel"
+        android:background="@color/colorPrimary"
+        android:paddingStart="12dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="4dp"
+        android:text="@string/class_information"
         android:textColor="@color/primaryTextColor"
-        android:textSize="16sp"
+        android:textSize="24sp"
         android:typeface="serif"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/addButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/classInfoScrollView"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <Button
-        android:id="@+id/addButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/curved_button_blue"
-        android:elevation="8dp"
-        android:shadowColor="@android:color/darker_gray"
-        android:text="@string/add"
-        android:textColor="@color/primaryTextColor"
-        android:textSize="16sp"
-        android:typeface="serif"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cancelButton"
-        app:layout_constraintTop_toBottomOf="@id/classInfoScrollView"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

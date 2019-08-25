@@ -1,24 +1,23 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.format.DateUtils;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TimePicker;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.SimpleTimeZone;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,8 +29,7 @@ import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class ClassInformationActivity extends AppCompatActivity {
 
-    public static final String START_TIME = "";
-    public static final String END_TIME = "";
+    public static final String TIME_FORMAT = "hh:mm";
 
     public static Intent createIntent(Context context) {
         return new Intent(context, ClassInformationActivity.class);
@@ -65,10 +63,10 @@ public class ClassInformationActivity extends AppCompatActivity {
     Button saturdayButton;
 
     @BindView(R.id.startTime)
-    Button startTimeButton;
+    TextView startTime;
 
     @BindView(R.id.endTime)
-    Button endTimeButton;
+    TextView endTime;
 
     @BindView(R.id.cancelButton)
     Button cancelButton;
@@ -78,7 +76,8 @@ public class ClassInformationActivity extends AppCompatActivity {
 
     List<String> daysList;
 
-    Calendar time;
+    Calendar startTimeCalendar;
+    Calendar endTimeCalendar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,25 +105,22 @@ public class ClassInformationActivity extends AppCompatActivity {
         thursdayButton.setOnClickListener(v -> handleButtonBackground(thursdayButton));
         fridayButton.setOnClickListener(v -> handleButtonBackground(fridayButton));
         saturdayButton.setOnClickListener(v -> handleButtonBackground(saturdayButton));
-        startTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                time = Calendar.getInstance();
-                DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
-                    time.set(Calendar.HOUR, hour);
-                    time.set(Calendar.MINUTE, minute);
-                });
-            }
+
+        startTime.setOnClickListener(v -> {
+            startTimeCalendar = Calendar.getInstance();
+            DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
+                startTimeCalendar.set(Calendar.HOUR, hour);
+                startTimeCalendar.set(Calendar.MINUTE, minute);
+                formatDisplayTime(startTime, startTimeCalendar);
+            });
         });
-        endTimeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                time = Calendar.getInstance();
-                DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
-                    time.set(Calendar.HOUR, hour);
-                    time.set(Calendar.MINUTE, minute);
-                });
-            }
+        endTime.setOnClickListener(v -> {
+            endTimeCalendar = Calendar.getInstance();
+            DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
+                endTimeCalendar.set(Calendar.HOUR, hour);
+                endTimeCalendar.set(Calendar.MINUTE, minute);
+                formatDisplayTime(endTime, endTimeCalendar);
+            });
         });
     }
 
@@ -142,25 +138,27 @@ public class ClassInformationActivity extends AppCompatActivity {
         }
     }
 
-    //TODO: Validations and Dates (Comeback)
+    private void formatDisplayTime(TextView textView, Calendar time) {
+        SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT, Locale.US);
+        textView.setText(sdf.format(time.getTime()));
+    }
+
     public StudentClass getClassDetails() {
         StudentClass studentClass = new StudentClass();
         studentClass.setName(className.getText().toString());
         studentClass.setProfessorName(professorName.getText().toString());
         studentClass.setRoomNumber(roomNumber.getText().toString());
         studentClass.setDays((daysList));
-        studentClass.setStartTime(new Date());
-        studentClass.setEndTime(new Date());
+        studentClass.setStartTime(startTimeCalendar.getTime());
+        studentClass.setEndTime(endTimeCalendar.getTime());
         studentClass.setTermId(DatabaseUtils.getUserTerm(this).getId());
         return studentClass;
     }
 
     private boolean fieldCheck() {
-        if (className.getText().toString().isEmpty()
+        return className.getText().toString().isEmpty()
                 || professorName.getText().toString().isEmpty()
                 || roomNumber.getText().toString().isEmpty()
-                || daysList.isEmpty())
-            return true;
-        else return false;
+                || daysList.isEmpty();
     }
 }
