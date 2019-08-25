@@ -31,10 +31,22 @@ public interface StudentClassDao {
     List<StudentClass> getStudentClassesWithDay(String days);
 
     @Query("SELECT * FROM StudentClass WHERE days LIKE :day")
-    List<StudentClassDetails> getStudentClassesWithTaks(String day);
+    List<StudentClassDetails> getStudentClassesWithTasks(String day);
 
     @Update
     int updateStudentClass(StudentClass studentClass);
+
+    @Query("UPDATE StudentClass SET total_homework = total_homework + 1 WHERE id =:classId")
+    int updateStudentClassTotalHomework(int classId);
+
+    @Query("UPDATE StudentClass SET total_test = total_test + 1 WHERE id =:classId")
+    int updateStudentClassTotalTest(int classId);
+
+    @Query("UPDATE StudentClass SET finished_homework = finished_homework + 1 WHERE id =:classId")
+    int updateStudentClassFinishedHomework(int classId);
+
+    @Query("UPDATE StudentClass SET completed_test = completed_test + 1 WHERE id =:classId")
+    int updateStudentClassCompletedTest(int classId);
 
     @Delete
     void deleteStudentClass(StudentClass studentClass);

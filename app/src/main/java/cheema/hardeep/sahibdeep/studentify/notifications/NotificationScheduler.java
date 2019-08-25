@@ -24,14 +24,16 @@ public class NotificationScheduler {
     public static final String KEY_TASK_ID = "key-task-id";
 
     private static final int STUDENT_CLASS_REMINDER_TIME_OFFSET = -15;
-    private static final int TASK_REMINDER_TIME_OFFSET = -1;
+    private static final int TASK_REMINDER_TIME_OFFSET = -720;
     private static final int ONE_SECOND = 1000;
     private static final int ONE_DAY_HOURS = 24;
     private static final int SEVEN = 7;
 
     public static void scheduleClassNotification(Context context, StudentClass studentClass) {
         Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling...");
-        Data inputData = new Data.Builder().putInt(KEY_STUDENT_CLASS_ID, studentClass.getId()).build();
+        Data inputData = new Data.Builder()
+                .putInt(KEY_STUDENT_CLASS_ID, studentClass.getId())
+                .build();
 
         long delay = calculateDelay(studentClass.getStartTime(), STUDENT_CLASS_REMINDER_TIME_OFFSET);
         PeriodicWorkRequest periodicWorkRequest =
@@ -80,9 +82,9 @@ public class NotificationScheduler {
 
         long delta;
         if (calendar.getTime().getTime() < System.currentTimeMillis()) {
+            calendar.add(Calendar.HOUR, ONE_DAY_HOURS);
             delta = (calendar.getTimeInMillis() - System.currentTimeMillis()) / ONE_SECOND;
         } else {
-            calendar.add(Calendar.HOUR, ONE_DAY_HOURS);
             delta = (calendar.getTimeInMillis() - System.currentTimeMillis()) / ONE_SECOND;
         }
         return delta;

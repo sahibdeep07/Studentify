@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
@@ -87,9 +88,11 @@ public class ClassInformationActivity extends AppCompatActivity {
             if (fieldCheck())
                 Toast.makeText(this, "Please Fill All The Fields And Select Days", Toast.LENGTH_SHORT).show();
             else {
+                StudentClass studentClass = getClassDetails();
                 StudentifyDatabaseProvider
                         .getStudentClassDao(ClassInformationActivity.this)
-                        .insertStudentClass(getClassDetails());
+                        .insertStudentClass(studentClass);
+                NotificationScheduler.scheduleClassNotification(this, studentClass);
                 finish();
             }
         });

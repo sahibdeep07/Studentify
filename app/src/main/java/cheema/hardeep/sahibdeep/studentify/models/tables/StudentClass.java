@@ -38,14 +38,14 @@ public class StudentClass {
     @ColumnInfo(name = "total_homework")
     private int totalHomework;
 
-    @ColumnInfo(name = "pending_homework")
-    private int pendingHomework;
+    @ColumnInfo(name = "finished_homework")
+    private int finishedHomework = 0;
 
     @ColumnInfo(name = "total_test")
     private int totalTest;
 
-    @ColumnInfo(name = "pending_test")
-    private int pendingTest;
+    @ColumnInfo(name = "completed_test")
+    private int completedTest = 0;
 
     public int getId() {
         return id;
@@ -119,12 +119,12 @@ public class StudentClass {
         this.totalHomework = totalHomework;
     }
 
-    public int getPendingHomework() {
-        return pendingHomework;
+    public int getFinishedHomework() {
+        return finishedHomework;
     }
 
-    public void setPendingHomework(int pendingHomework) {
-        this.pendingHomework = pendingHomework;
+    public void setFinishedHomework(int finishedHomework) {
+        this.finishedHomework = finishedHomework;
     }
 
     public int getTotalTest() {
@@ -135,11 +135,11 @@ public class StudentClass {
         this.totalTest = totalTest;
     }
 
-    public int getPendingTest() {
-        return pendingTest;
+    public int getCompletedTest() {
+        return completedTest;
     }
 
-    public void setPendingTest(int pendingTest) {
-        this.pendingTest = pendingTest;
+    public void setCompletedTest(int completedTest) {
+        this.completedTest = completedTest;
     }
 }

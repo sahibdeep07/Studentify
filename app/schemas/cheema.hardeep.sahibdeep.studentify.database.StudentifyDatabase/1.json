@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "03ffdcc332069a9809c83f4be07eda1f",
+    "identityHash": "f08b3ddfc1ee146dd575f7812fa22220",
     "entities": [
       {
         "tableName": "UserInformation",
@@ -106,7 +106,7 @@
       },
       {
         "tableName": "StudentClass",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `term_id` INTEGER NOT NULL, `name` TEXT, `professor_name` TEXT, `room_number` TEXT, `days` TEXT, `start_time` INTEGER, `end_time` INTEGER, `total_homework` INTEGER NOT NULL, `pending_homework` INTEGER NOT NULL, `total_test` INTEGER NOT NULL, `pending_test` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `term_id` INTEGER NOT NULL, `name` TEXT, `professor_name` TEXT, `room_number` TEXT, `days` TEXT, `start_time` INTEGER, `end_time` INTEGER, `total_homework` INTEGER NOT NULL, `finished_homework` INTEGER NOT NULL, `total_test` INTEGER NOT NULL, `completed_test` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -163,8 +163,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "pendingHomework",
-            "columnName": "pending_homework",
+            "fieldPath": "finishedHomework",
+            "columnName": "finished_homework",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -175,8 +175,8 @@
             "notNull": true
           },
           {
-            "fieldPath": "pendingTest",
-            "columnName": "pending_test",
+            "fieldPath": "completedTest",
+            "columnName": "completed_test",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -244,7 +244,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '03ffdcc332069a9809c83f4be07eda1f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'f08b3ddfc1ee146dd575f7812fa22220')"
     ]
   }
 }

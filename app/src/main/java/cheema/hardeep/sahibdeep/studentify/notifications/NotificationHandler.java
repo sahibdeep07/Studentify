@@ -50,13 +50,13 @@ public class NotificationHandler {
                 task.getName(),
                 getTaskNotificationBody(task.getType(), task.getNotes()),
                 R.drawable.add_icon_64,
-                generateTaskActivityPendingIntent(context)
+                generateTaskActivityPendingIntent(context, task.getStudentClassId())
         );
     }
 
     private static void showNotification(Context context, String title, String body, int iconId, PendingIntent contentIntent) {
         createNotificationChannel(context);
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
@@ -65,7 +65,7 @@ public class NotificationHandler {
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(generateRandomNotificationId(), builder.build());
+        notificationManager.notify(generateRandomNotificationId(), notification.build());
     }
 
     private static int generateRandomNotificationId() {
@@ -76,10 +76,10 @@ public class NotificationHandler {
         return PendingIntent.getActivity(context, 0, HomeActivity.createIntent(context), 0);
     }
 
-    private static PendingIntent generateTaskActivityPendingIntent(Context context) {
+    private static PendingIntent generateTaskActivityPendingIntent(Context context, int taskClassId) {
         Intent homeActivityIntent = HomeActivity.createIntent(context);
         homeActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        Intent taskActivityIntent = TasksActivity.createIntent(context);
+        Intent taskActivityIntent = TasksActivity.createIntent(context, taskClassId);
 
         return PendingIntent.getActivities(context, 0, new Intent[]{homeActivityIntent, taskActivityIntent}, 0);
     }

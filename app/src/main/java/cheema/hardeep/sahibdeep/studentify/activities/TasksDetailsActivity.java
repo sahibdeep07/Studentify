@@ -18,9 +18,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
+import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
+import cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
@@ -31,7 +33,6 @@ public class TasksDetailsActivity extends AppCompatActivity {
     public static final String KEY_IS_HOMEWORK = "key-is-homework";
     public static final String KEY_CLASS_ID = "key-class-id";
     public static final String KEY_TASK_ID = "key-task-id";
-    public static final String DATE_TIME_FORMAT = "MMM dd, YYYY HH:MM";
 
     public static Intent createIntent(Context context, boolean homework, int classId, int taskId) {
         Intent intent = new Intent(context, TasksDetailsActivity.class);
@@ -76,11 +77,14 @@ public class TasksDetailsActivity extends AppCompatActivity {
 
         cancelButton.setOnClickListener(v -> finish());
         addButton.setOnClickListener(v -> {
+            Task task = getTask();
             if (taskId == NEGATIVE_TASK_ID) {
-                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(getTask());
+                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(task);
+                incrementStudentClassTaskCount();
             } else {
-                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).upddateTask(getTask());
+                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).upddateTask(task);
             }
+            NotificationScheduler.scheduleTaskNotification(this, task);
             finish();
         });
 
@@ -97,6 +101,14 @@ public class TasksDetailsActivity extends AppCompatActivity {
                 });
             });
         });
+    }
+
+    private void incrementStudentClassTaskCount() {
+        if(taskType == TaskType.HOMEWORK) {
+            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalHomework(classId);
+        } else if(taskType == TaskType.TEST) {
+            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalTest(classId);
+        }
     }
 
     public Task getTask() {
