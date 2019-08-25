@@ -41,7 +41,6 @@ public class DialogUtil {
         int hour = currentTime.get(Calendar.HOUR_OF_DAY);
         int minute = currentTime.get(Calendar.MINUTE);
         TimePickerDialog timePicker = new TimePickerDialog(context, listener, hour, minute, false);
-        timePicker.setTitle(SELECT_TIME);
         timePicker.show();
     }
 
@@ -51,7 +50,6 @@ public class DialogUtil {
         int month = currentTime.get(Calendar.MONTH);
         int dayOfMonth = currentTime.get(Calendar.DAY_OF_MONTH);
         DatePickerDialog datePicker = new DatePickerDialog(context, listener, year, month, dayOfMonth);
-        datePicker.setTitle(SELECT_DATE);
         datePicker.getDatePicker().setMinDate(currentTime.getTimeInMillis() - THOUSAND);
         datePicker.show();
     }
