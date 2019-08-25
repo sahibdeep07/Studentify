@@ -41,6 +41,7 @@
     <string name="schedule">Schedule</string>
     <string name="user_information">User Information</string>
     <string name="university_name">University Name</string>
-    <string name="professor">professor</string>
-    <string name="class_title">Class Title</string>\
+    <string name="professor">Professor</string>
+    <string name="class_title">Class Title</string>
+    <string name="date_time">Date Time</string>\
 </resources>

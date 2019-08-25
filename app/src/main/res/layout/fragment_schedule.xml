@@ -13,11 +13,13 @@
         <View
             android:id="@+id/scheduleView"
             android:layout_width="match_parent"
-            android:layout_height="184dp"
+            android:layout_height="0dp"
             android:background="@color/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:paddingBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@id/guideline"
             />
 
         <TextView
@@ -50,13 +52,12 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/daysRecyclerView"
             android:layout_width="0dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="12dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="12dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/scheduleSemester" />
+            app:layout_constraintTop_toBottomOf="@id/scheduleSemester"
+            app:layout_constraintBottom_toBottomOf="@id/scheduleView"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/classesRecyclerView"
@@ -67,9 +68,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginTop="18dp"
-            android:layout_marginStart="44dp"
-            android:layout_marginEnd="44dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.35" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
