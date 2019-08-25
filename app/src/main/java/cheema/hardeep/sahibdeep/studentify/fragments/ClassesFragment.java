@@ -17,9 +17,10 @@ import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.activities.ClassInformationActivity;
 import cheema.hardeep.sahibdeep.studentify.adapters.ClassAdapter;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
+import cheema.hardeep.sahibdeep.studentify.interfaces.ClassesInterface;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtils;
 
-public class ClassesFragment extends Fragment {
+public class ClassesFragment extends Fragment implements ClassesInterface {
 
     @BindView(R.id.universityName)
     TextView universityName;
@@ -54,5 +55,14 @@ public class ClassesFragment extends Fragment {
         universityName.setText(DatabaseUtils.getUserInformation(getContext()).getCollegeName());
         semester.setText(termName);
         classAdapter.updateList(StudentifyDatabaseProvider.getTermDao(getContext()).getTermWithClasses(termName).getStudentClasses());
+    }
+
+    @Override
+    public void refreshClasses() {
+        String termName = DatabaseUtils.getUserInformation(getContext()).getTermName();
+        classAdapter.updateList(StudentifyDatabaseProvider
+                .getTermDao(getContext())
+                .getTermWithClasses(termName)
+                .getStudentClasses());
     }
 }

@@ -70,13 +70,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     class TaskViewHolder extends RecyclerView.ViewHolder {
         View itemView;
         TextView name;
-        TextView day;
         TextView time;
 
         TaskViewHolder(@NonNull View itemView) {
             super(itemView);
             name = itemView.findViewById(R.id.homeworkName);
-            day = itemView.findViewById(R.id.homeworkDay);
             time = itemView.findViewById(R.id.homeworkTime);
             this.itemView = itemView;
         }

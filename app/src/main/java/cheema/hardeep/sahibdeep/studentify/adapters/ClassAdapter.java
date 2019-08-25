@@ -14,14 +14,18 @@ import java.util.List;
 
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.activities.TasksActivity;
+import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
+import cheema.hardeep.sahibdeep.studentify.interfaces.ClassesInterface;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ScheduleInterface;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHolder> {
 
     private static final String NONE = "None";
 
     private List<StudentClass> studentClassList = new ArrayList<>();
+    private ClassesInterface classesInterface ;
 
     public void updateList(List<StudentClass> studentClassList) {
         this.studentClassList = studentClassList;
@@ -46,8 +50,18 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         holder.homework.setText(NONE);
         holder.itemView.setOnClickListener(v ->
                 v.getContext().startActivity(TasksActivity.createIntent(v.getContext(), studentClass.getId()))
-
         );
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                DialogUtil.createDeleteConfirmationDialog(v.getContext(),
+                        (dialogInterface, i) -> {
+                    StudentifyDatabaseProvider.getStudentClassDao(v.getContext()).deleteStudentClass(studentClass);
+                     classesInterface.refreshClasses();
+                        });
+                return true;
+            }
+        });
     }
 
     @Override

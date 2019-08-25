@@ -1,17 +1,24 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
+import android.view.View;
 import android.widget.Button;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.SimpleTimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,8 +26,12 @@ import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtils;
+import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class ClassInformationActivity extends AppCompatActivity {
+
+    public static final String START_TIME = "";
+    public static final String END_TIME = "";
 
     public static Intent createIntent(Context context) {
         return new Intent(context, ClassInformationActivity.class);
@@ -67,6 +78,8 @@ public class ClassInformationActivity extends AppCompatActivity {
 
     List<String> daysList;
 
+    Calendar time;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +90,14 @@ public class ClassInformationActivity extends AppCompatActivity {
 
         cancelButton.setOnClickListener(v -> finish());
         addButton.setOnClickListener(v -> {
-            StudentifyDatabaseProvider
-                    .getStudentClassDao(ClassInformationActivity.this)
-                    .insertStudentClass(getClassDetails());
-            finish();
+            if (fieldCheck())
+                Toast.makeText(this, "Please Fill All The Fields And Select Days", Toast.LENGTH_SHORT).show();
+            else {
+                StudentifyDatabaseProvider
+                        .getStudentClassDao(ClassInformationActivity.this)
+                        .insertStudentClass(getClassDetails());
+                finish();
+            }
         });
 
         mondayButton.setOnClickListener(v -> handleButtonBackground(mondayButton));
@@ -89,6 +106,26 @@ public class ClassInformationActivity extends AppCompatActivity {
         thursdayButton.setOnClickListener(v -> handleButtonBackground(thursdayButton));
         fridayButton.setOnClickListener(v -> handleButtonBackground(fridayButton));
         saturdayButton.setOnClickListener(v -> handleButtonBackground(saturdayButton));
+        startTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                time = Calendar.getInstance();
+                DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
+                    time.set(Calendar.HOUR, hour);
+                    time.set(Calendar.MINUTE, minute);
+                });
+            }
+        });
+        endTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                time = Calendar.getInstance();
+                DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
+                    time.set(Calendar.HOUR, hour);
+                    time.set(Calendar.MINUTE, minute);
+                });
+            }
+        });
     }
 
     private void handleButtonBackground(Button button) {
@@ -116,5 +153,14 @@ public class ClassInformationActivity extends AppCompatActivity {
         studentClass.setEndTime(new Date());
         studentClass.setTermId(DatabaseUtils.getUserTerm(this).getId());
         return studentClass;
+    }
+
+    private boolean fieldCheck() {
+        if (className.getText().toString().isEmpty()
+                || professorName.getText().toString().isEmpty()
+                || roomNumber.getText().toString().isEmpty()
+                || daysList.isEmpty())
+            return true;
+        else return false;
     }
 }

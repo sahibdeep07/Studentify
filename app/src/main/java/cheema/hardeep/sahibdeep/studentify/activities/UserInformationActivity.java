@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -83,12 +84,17 @@ public class UserInformationActivity extends AppCompatActivity {
         }
 
         saveButton.setOnClickListener(v -> {
-            UserInformation userInfo = getUserInformation();
-            StudentifyDatabaseProvider.getUserInformationDao(this).insertUserInformation(userInfo);
-            StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
-            SharedPreferencesProvider.saveUserId(this, userInfo.getStudentId());
-            SharedPreferencesProvider.saveFirstLaunchCompleted(this);
-            startActivity(HomeActivity.createIntent(UserInformationActivity.this));
+            if (fieldCheck())
+                Toast.makeText(this, "Please Fill All The Fields", Toast.LENGTH_SHORT).show();
+            else {
+                UserInformation userInfo = getUserInformation();
+                StudentifyDatabaseProvider.getUserInformationDao(this).insertUserInformation(userInfo);
+                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
+                SharedPreferencesProvider.saveUserId(this, userInfo.getStudentId());
+                SharedPreferencesProvider.saveFirstLaunchCompleted(this);
+                startActivity(HomeActivity.createIntent(UserInformationActivity.this));
+                finish();
+            }
         });
 
         clearTermButton.setOnClickListener(v -> clearTerm());
@@ -117,6 +123,18 @@ public class UserInformationActivity extends AppCompatActivity {
         userInformation.setAddress(address.getText().toString());
         userInformation.setTermName(term.getText().toString());
         return userInformation;
+    }
+
+    public boolean fieldCheck() {
+        if (name.getText().toString().isEmpty()
+                || collegeName.getText().toString().isEmpty()
+                || studentID.getText().toString().isEmpty()
+                || phoneNumber.getText().toString().isEmpty()
+                || dob.getText().toString().isEmpty()
+                || address.getText().toString().isEmpty()
+                || term.getText().toString().isEmpty())
+            return true;
+        else return false;
     }
 
     //TODO: Duration of Term
