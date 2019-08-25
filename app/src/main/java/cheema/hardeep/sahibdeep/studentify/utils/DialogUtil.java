@@ -16,8 +16,6 @@ public class DialogUtil {
     private static final String DELETE_MESSAGE = "Are you sure you want to delete?";
     private static final String YES = "Yes";
     private static final String CANCEL = "Cancel";
-    private static final String SELECT_TIME = "Select Time";
-    private static final String SELECT_DATE = "Select Date";
     private static final int THOUSAND = 1000;
 
     public static void createTermDialog(Context context, CharSequence[] items, DialogInterface.OnClickListener listener) {
