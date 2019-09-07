@@ -3,8 +3,10 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +40,12 @@ public class TasksActivity extends AppCompatActivity implements ViewRefreshInter
 
     @BindView(R.id.homeworkRecyclerView)
     RecyclerView homeworkRecyclerView;
+
+    @BindView(R.id.noTest)
+    TextView noTest;
+
+    @BindView(R.id.noHomework)
+    TextView noHomework;
 
     @BindView(R.id.testRecyclerView)
     RecyclerView testRecyclerView;
@@ -82,6 +90,10 @@ public class TasksActivity extends AppCompatActivity implements ViewRefreshInter
                         .getTaskDao(this)
                         .getTaskWithType(classId, TaskType.TEST.name())
         );
+        if (!StudentifyDatabaseProvider
+                .getTaskDao(this)
+                .getTaskWithType(classId, TaskType.TEST.name()).isEmpty())
+            noTest.setVisibility(View.GONE);
     }
 
     @Override
@@ -91,6 +103,10 @@ public class TasksActivity extends AppCompatActivity implements ViewRefreshInter
                         .getTaskDao(this)
                         .getTaskWithType(classId, TaskType.HOMEWORK.name())
         );
+        if (!StudentifyDatabaseProvider
+                .getTaskDao(this)
+                .getTaskWithType(classId, TaskType.HOMEWORK.name()).isEmpty())
+            noHomework.setVisibility(View.GONE);
     }
 
     private void setupTestRV() {

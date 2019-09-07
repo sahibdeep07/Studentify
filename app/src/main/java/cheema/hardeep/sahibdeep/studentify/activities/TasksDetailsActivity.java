@@ -1,9 +1,11 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -95,7 +97,7 @@ public class TasksDetailsActivity extends AppCompatActivity {
                 userDateTime.set(Calendar.MONTH, month);
                 userDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 DialogUtil.createTimeDialog(TasksDetailsActivity.this, (timePicker, hour, minute) -> {
-                    userDateTime.set(Calendar.HOUR, hour);
+                    userDateTime.set(Calendar.HOUR_OF_DAY, hour);
                     userDateTime.set(Calendar.MINUTE, minute);
                     time.setText(DateUtils.formatDisplayDateTime(userDateTime));
                 });

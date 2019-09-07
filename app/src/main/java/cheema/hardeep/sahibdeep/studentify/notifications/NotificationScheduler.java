@@ -9,12 +9,17 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 
+import java.sql.Time;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
+import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 
 public class NotificationScheduler {
 
@@ -34,6 +39,21 @@ public class NotificationScheduler {
         Data inputData = new Data.Builder()
                 .putInt(KEY_STUDENT_CLASS_ID, studentClass.getId())
                 .build();
+
+//        for (String days : studentClass.getDays()
+//             ) {
+//
+//            SimpleDateFormat sdf = new SimpleDateFormat("EEE, hh:mm a");
+//            Date date = null;
+//            try {
+//                date = sdf.parse(days);
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            Calendar cal = Calendar.getInstance();
+//            cal.setTime(date);
+//        }
+
 
         long delay = calculateDelay(studentClass.getStartTime(), STUDENT_CLASS_REMINDER_TIME_OFFSET);
         PeriodicWorkRequest periodicWorkRequest =

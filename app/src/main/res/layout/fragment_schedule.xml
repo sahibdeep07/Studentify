@@ -36,6 +36,19 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
+            android:id="@+id/noClassSchedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/classesRecyclerView"
+            app:layout_constraintBottom_toBottomOf="@id/classesRecyclerView"
+            app:layout_constraintStart_toStartOf="@id/classesRecyclerView"
+            app:layout_constraintEnd_toEndOf="@id/classesRecyclerView"
+            android:textSize="16sp"
+            android:text="No classes on this day."
+            android:textColor="@color/secondaryTextColor"
+            />
+
+        <TextView
             android:id="@+id/scheduleSemester"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

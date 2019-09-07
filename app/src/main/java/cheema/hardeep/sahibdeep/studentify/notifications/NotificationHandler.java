@@ -85,7 +85,7 @@ public class NotificationHandler {
     }
 
     private static String getClassNotificationBody(String professor, String roomNumber) {
-        return "You class with " + professor + " will start in 15 minutes, in room number " + roomNumber;
+        return "Your class with professor " + professor + " will start in 15 minutes, in room number " + roomNumber;
     }
 
     private static String getTaskNotificationBody(TaskType taskType, String notes) {

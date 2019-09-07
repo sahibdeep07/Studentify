@@ -33,6 +33,10 @@ public class ClassesFragment extends Fragment implements ClassesInterface {
 
     @BindView(R.id.classDetailRecyclerView)
     RecyclerView classDetailRV;
+
+    @BindView(R.id.noClass)
+    TextView noClass;
+
     private ClassAdapter classAdapter;
 
     @Override
@@ -64,5 +68,11 @@ public class ClassesFragment extends Fragment implements ClassesInterface {
                 .getTermDao(getContext())
                 .getTermWithClasses(termName)
                 .getStudentClasses());
+
+        if(!StudentifyDatabaseProvider
+                .getTermDao(getContext())
+                .getTermWithClasses(termName)
+                .getStudentClasses().isEmpty())
+            noClass.setVisibility(View.GONE);
     }
 }

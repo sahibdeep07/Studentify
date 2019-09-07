@@ -1,11 +1,15 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.BindView;
@@ -22,6 +27,7 @@ import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
+import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class UserInformationActivity extends AppCompatActivity {
@@ -66,6 +72,7 @@ public class UserInformationActivity extends AppCompatActivity {
     Button clearTermButton;
 
     UserInformation userInformation = null;
+    Calendar userDob;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,13 +104,43 @@ public class UserInformationActivity extends AppCompatActivity {
             }
         });
 
-        clearTermButton.setOnClickListener(v -> clearTerm());
+        clearTermButton.setOnClickListener(v -> DialogUtil.createDeleteConfirmationDialog(this, (dialog, which) -> {
+            clearTerm();
+            if (fieldCheck())
+                Toast.makeText(UserInformationActivity.this, "Please Fill All The Fields", Toast.LENGTH_SHORT).show();
+            else {
+                UserInformation userInfo = getUserInformation();
+                StudentifyDatabaseProvider.getUserInformationDao(UserInformationActivity.this).insertUserInformation(userInfo);
+                StudentifyDatabaseProvider.getTermDao(UserInformationActivity.this).insertTerm(getTerm(userInfo.getTermName()));
+                SharedPreferencesProvider.saveUserId(UserInformationActivity.this, userInfo.getStudentId());
+                SharedPreferencesProvider.saveFirstLaunchCompleted(UserInformationActivity.this);
+                startActivity(HomeActivity.createIntent(UserInformationActivity.this));
+                finish();
+            }
+        })
+        );
+        term.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
 
-        termContainer.setOnClickListener(v -> DialogUtil.createTermDialog(v.getContext(), termItems, (dialog, which) -> {
-            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-            term.setText(termItems[selectedPosition]);
+                return false;
+            }
+        });
+
+        term.setOnClickListener(v -> {
+            DialogUtil.createTermDialog(v.getContext(), termItems, (dialog, which) -> {
+                int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                term.setText(termItems[selectedPosition]);
+            });
+        });
+
+        dob.setOnClickListener(v -> DialogUtil.createDobDateDialog(UserInformationActivity.this, (view, year, month, dayOfMonth) -> {
+            userDob = Calendar.getInstance();
+            userDob.set(Calendar.YEAR, year);
+            userDob.set(Calendar.MONTH, month);
+            userDob.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            dob.setText(DateUtils.formatDisplayDate(userDob));
         }));
-
     }
 
     private void clearTerm() {
@@ -112,7 +149,6 @@ public class UserInformationActivity extends AppCompatActivity {
         StudentifyDatabaseProvider.getStudentClassDao(this).deleteAll();
     }
 
-    //TODO: Validations
     public UserInformation getUserInformation() {
         UserInformation userInformation = new UserInformation();
         userInformation.setName(name.getText().toString());
