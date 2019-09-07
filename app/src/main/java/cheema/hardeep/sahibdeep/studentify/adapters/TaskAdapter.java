@@ -54,9 +54,9 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
                     (dialogInterface, i) -> {
                         StudentifyDatabaseProvider.getTaskDao(view.getContext()).deleteTask(task);
                         if (isHomework) {
-                            viewRefreshInterface.refreshHomework();
+                            viewRefreshInterface.refreshHomework(true);
                         } else {
-                            viewRefreshInterface.refreshTest();
+                            viewRefreshInterface.refreshTest(true);
                         }
                     });
             return true;

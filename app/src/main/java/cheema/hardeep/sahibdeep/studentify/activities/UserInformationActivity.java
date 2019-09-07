@@ -1,5 +1,6 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
@@ -74,6 +75,7 @@ public class UserInformationActivity extends AppCompatActivity {
     UserInformation userInformation = null;
     Calendar userDob;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -105,42 +107,44 @@ public class UserInformationActivity extends AppCompatActivity {
         });
 
         clearTermButton.setOnClickListener(v -> DialogUtil.createDeleteConfirmationDialog(this, (dialog, which) -> {
-            clearTerm();
-            if (fieldCheck())
-                Toast.makeText(UserInformationActivity.this, "Please Fill All The Fields", Toast.LENGTH_SHORT).show();
-            else {
-                UserInformation userInfo = getUserInformation();
-                StudentifyDatabaseProvider.getUserInformationDao(UserInformationActivity.this).insertUserInformation(userInfo);
-                StudentifyDatabaseProvider.getTermDao(UserInformationActivity.this).insertTerm(getTerm(userInfo.getTermName()));
-                SharedPreferencesProvider.saveUserId(UserInformationActivity.this, userInfo.getStudentId());
-                SharedPreferencesProvider.saveFirstLaunchCompleted(UserInformationActivity.this);
-                startActivity(HomeActivity.createIntent(UserInformationActivity.this));
-                finish();
-            }
-        })
+                    clearTerm();
+                    if (fieldCheck())
+                        Toast.makeText(UserInformationActivity.this, "Please Fill All The Fields", Toast.LENGTH_SHORT).show();
+                    else {
+                        UserInformation userInfo = getUserInformation();
+                        StudentifyDatabaseProvider.getUserInformationDao(UserInformationActivity.this).insertUserInformation(userInfo);
+                        StudentifyDatabaseProvider.getTermDao(UserInformationActivity.this).insertTerm(getTerm(userInfo.getTermName()));
+                        SharedPreferencesProvider.saveUserId(UserInformationActivity.this, userInfo.getStudentId());
+                        SharedPreferencesProvider.saveFirstLaunchCompleted(UserInformationActivity.this);
+                        startActivity(HomeActivity.createIntent(UserInformationActivity.this));
+                        finish();
+                    }
+                })
         );
-        term.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                return false;
+        term.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                DialogUtil.createTermDialog(v.getContext(), termItems, (dialog, which) -> {
+                    int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                    term.setText(termItems[selectedPosition]);
+                    dialog.dismiss();
+                });
             }
+            return true;
         });
 
-        term.setOnClickListener(v -> {
-            DialogUtil.createTermDialog(v.getContext(), termItems, (dialog, which) -> {
-                int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                term.setText(termItems[selectedPosition]);
-            });
+        dob.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                DialogUtil.createDobDateDialog(UserInformationActivity.this, (view, year, month, dayOfMonth) -> {
+                    userDob = Calendar.getInstance();
+                    userDob.set(Calendar.YEAR, year);
+                    userDob.set(Calendar.MONTH, month);
+                    userDob.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    dob.setText(DateUtils.formatDisplayDate(userDob));
+                });
+            }
+            return false;
         });
-
-        dob.setOnClickListener(v -> DialogUtil.createDobDateDialog(UserInformationActivity.this, (view, year, month, dayOfMonth) -> {
-            userDob = Calendar.getInstance();
-            userDob.set(Calendar.YEAR, year);
-            userDob.set(Calendar.MONTH, month);
-            userDob.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            dob.setText(DateUtils.formatDisplayDate(userDob));
-        }));
+        
     }
 
     private void clearTerm() {

@@ -11,9 +11,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.w3c.dom.Text;
-
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -27,10 +24,9 @@ import cheema.hardeep.sahibdeep.studentify.adapters.ScheduleDaysAdapter;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ScheduleInterface;
 import cheema.hardeep.sahibdeep.studentify.models.ScheduleDay;
+import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
-
-import static cheema.hardeep.sahibdeep.studentify.R2.id.date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -72,26 +68,27 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
         classesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         classAdapter = new ClassAdapter(true);
         classesRecyclerView.setAdapter(classAdapter);
-        classAdapter.updateList(StudentifyDatabaseProvider
-                .getStudentClassDao(getContext())
-                .getStudentClassesWithDay(WILDCARD + getCurrentDay() + WILDCARD));
-        if(!StudentifyDatabaseProvider
-                .getStudentClassDao(getContext())
-                .getStudentClassesWithDay(WILDCARD + getCurrentDay() + WILDCARD).isEmpty())
-            noClassSchedule.setVisibility(View.GONE);
+        initializeView(getCurrentDay());
         return view;
     }
 
-    // TODO: 26-08-2019  
+    private void initializeView(String day) {
+        List<StudentClass> studentClassesWithDay = StudentifyDatabaseProvider
+                .getStudentClassDao(getContext())
+                .getStudentClassesWithDay(WILDCARD + day + WILDCARD);
+        if (studentClassesWithDay.isEmpty()) {
+            noClassSchedule.setVisibility(View.VISIBLE);
+            classesRecyclerView.setVisibility(View.GONE);
+        } else {
+            noClassSchedule.setVisibility(View.GONE);
+            classesRecyclerView.setVisibility(View.VISIBLE);
+            classAdapter.updateList(studentClassesWithDay);
+        }
+    }
+
     @Override
     public void onDaySelected(String day) {
-        if(!StudentifyDatabaseProvider
-                .getStudentClassDao(getContext())
-                .getStudentClassesWithDay(WILDCARD + day + WILDCARD).isEmpty())
-            noClassSchedule.setVisibility(View.GONE);
-        classAdapter.updateList(StudentifyDatabaseProvider
-                .getStudentClassDao(getContext())
-                .getStudentClassesWithDay(WILDCARD + day + WILDCARD));
+     initializeView(day);
     }
 
     private List<ScheduleDay> generateDates() {

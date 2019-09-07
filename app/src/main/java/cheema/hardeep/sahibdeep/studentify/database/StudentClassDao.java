@@ -36,11 +36,11 @@ public interface StudentClassDao {
     @Update
     int updateStudentClass(StudentClass studentClass);
 
-    @Query("UPDATE StudentClass SET total_homework = total_homework + 1 WHERE id =:classId")
-    int updateStudentClassTotalHomework(int classId);
+    @Query("UPDATE StudentClass SET total_homework = total_homework + :value WHERE id =:classId")
+    int updateStudentClassTotalHomework(int classId, int value);
 
-    @Query("UPDATE StudentClass SET total_test = total_test + 1 WHERE id =:classId")
-    int updateStudentClassTotalTest(int classId);
+    @Query("UPDATE StudentClass SET total_test = total_test + :value WHERE id =:classId")
+    int updateStudentClassTotalTest(int classId, int value);
 
     @Query("UPDATE StudentClass SET finished_homework = finished_homework + 1 WHERE id =:classId")
     int updateStudentClassFinishedHomework(int classId);

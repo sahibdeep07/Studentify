@@ -107,9 +107,9 @@ public class TasksDetailsActivity extends AppCompatActivity {
 
     private void incrementStudentClassTaskCount() {
         if(taskType == TaskType.HOMEWORK) {
-            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalHomework(classId);
+            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalHomework(classId, 1);
         } else if(taskType == TaskType.TEST) {
-            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalTest(classId);
+            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalTest(classId, 1);
         }
     }
 
