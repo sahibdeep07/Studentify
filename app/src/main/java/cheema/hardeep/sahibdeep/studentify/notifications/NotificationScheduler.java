@@ -73,11 +73,13 @@ public class NotificationScheduler {
         Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling...");
         Data inputData = new Data.Builder().putInt(KEY_TASK_ID, task.getId()).build();
 
-        long delay = calculateDelay(task.getDateTime(), TASK_REMINDER_TIME_OFFSET);
+        long initDelay = task.getDateTime().getTime() - System.currentTimeMillis();
+        //How do we introduce last reminder offset?
+
         OneTimeWorkRequest oneTimeWorkRequest =
                 new OneTimeWorkRequest
                         .Builder(StudentifyWorker.class)
-                        .setInitialDelay(delay, TimeUnit.SECONDS)
+                        .setInitialDelay(initDelay, TimeUnit.MILLISECONDS)
                         .setInputData(inputData)
                         .addTag(NOTIFICATION_TASK_WORKER)
                         .build();
