@@ -47,16 +47,16 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         Task task = testList.get(position);
         holder.name.setText(task.getName());
         holder.time.setText(DateUtils.formatDisplayDateTime(task.getDateTime()));
-        holder.itemView.setOnClickListener(v -> TasksDetailsActivity.createIntent(v.getContext(), isHomework, task.getStudentClassId(), task.getId()));
+        holder.itemView.setOnClickListener(v -> v.getContext().startActivity(TasksDetailsActivity.createIntent(v.getContext(), isHomework, task.getStudentClassId(), task.getId())));
 
         holder.itemView.setOnLongClickListener(view -> {
             DialogUtil.createDeleteConfirmationDialog(view.getContext(),
                     (dialogInterface, i) -> {
                         StudentifyDatabaseProvider.getTaskDao(view.getContext()).deleteTask(task);
                         if (isHomework) {
-                            viewRefreshInterface.refreshHomework();
+                            viewRefreshInterface.refreshHomework(true);
                         } else {
-                            viewRefreshInterface.refreshTest();
+                            viewRefreshInterface.refreshTest(true);
                         }
                     });
             return true;

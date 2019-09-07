@@ -59,6 +59,31 @@
                 app:srcCompat="@drawable/ic_add_circle_outline_white_32dp" />
 
 
+            <TextView
+                android:id="@+id/noHomework"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/homeworkRecyclerView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/homeworkRecyclerView"
+                android:text="No Homework Added Yet!"
+                android:elevation="1dp"
+                android:textColor="@color/secondaryTextColor"/>
+
+            <TextView
+                android:id="@+id/noTest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="@id/testRecyclerView"
+                app:layout_constraintBottom_toBottomOf="@id/testRecyclerView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="No Test/Quiz Added Yet!"
+                android:textColor="@color/secondaryTextColor"
+                android:elevation="1dp"
+                />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/homeworkRecyclerView"
                 android:layout_width="match_parent"

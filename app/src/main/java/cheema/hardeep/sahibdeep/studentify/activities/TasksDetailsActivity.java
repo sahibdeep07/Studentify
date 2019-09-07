@@ -1,9 +1,11 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,9 +20,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
+import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
+import cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
@@ -31,7 +35,6 @@ public class TasksDetailsActivity extends AppCompatActivity {
     public static final String KEY_IS_HOMEWORK = "key-is-homework";
     public static final String KEY_CLASS_ID = "key-class-id";
     public static final String KEY_TASK_ID = "key-task-id";
-    public static final String DATE_TIME_FORMAT = "MMM dd, YYYY HH:MM";
 
     public static Intent createIntent(Context context, boolean homework, int classId, int taskId) {
         Intent intent = new Intent(context, TasksDetailsActivity.class);
@@ -76,11 +79,14 @@ public class TasksDetailsActivity extends AppCompatActivity {
 
         cancelButton.setOnClickListener(v -> finish());
         addButton.setOnClickListener(v -> {
+            Task task = getTask();
             if (taskId == NEGATIVE_TASK_ID) {
-                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(getTask());
+                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(task);
+                incrementStudentClassTaskCount();
             } else {
-                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).upddateTask(getTask());
+                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).upddateTask(task);
             }
+            NotificationScheduler.scheduleTaskNotification(this, task);
             finish();
         });
 
@@ -91,12 +97,20 @@ public class TasksDetailsActivity extends AppCompatActivity {
                 userDateTime.set(Calendar.MONTH, month);
                 userDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
                 DialogUtil.createTimeDialog(TasksDetailsActivity.this, (timePicker, hour, minute) -> {
-                    userDateTime.set(Calendar.HOUR, hour);
+                    userDateTime.set(Calendar.HOUR_OF_DAY, hour);
                     userDateTime.set(Calendar.MINUTE, minute);
                     time.setText(DateUtils.formatDisplayDateTime(userDateTime));
                 });
             });
         });
+    }
+
+    private void incrementStudentClassTaskCount() {
+        if(taskType == TaskType.HOMEWORK) {
+            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalHomework(classId, 1);
+        } else if(taskType == TaskType.TEST) {
+            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalTest(classId, 1);
+        }
     }
 
     public Task getTask() {

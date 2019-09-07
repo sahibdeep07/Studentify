@@ -3,12 +3,16 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,6 +20,7 @@ import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.adapters.TaskAdapter;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ViewRefreshInterface;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
 
 import static cheema.hardeep.sahibdeep.studentify.activities.TasksDetailsActivity.NEGATIVE_TASK_ID;
@@ -38,6 +43,12 @@ public class TasksActivity extends AppCompatActivity implements ViewRefreshInter
 
     @BindView(R.id.homeworkRecyclerView)
     RecyclerView homeworkRecyclerView;
+
+    @BindView(R.id.noTest)
+    TextView noTest;
+
+    @BindView(R.id.noHomework)
+    TextView noHomework;
 
     @BindView(R.id.testRecyclerView)
     RecyclerView testRecyclerView;
@@ -71,26 +82,34 @@ public class TasksActivity extends AppCompatActivity implements ViewRefreshInter
     @Override
     protected void onResume() {
         super.onResume();
-        refreshTest();
-        refreshHomework();
+        refreshTest(false);
+        refreshHomework(false);
     }
 
     @Override
-    public void refreshTest() {
-        testAdapter.updateList(
-                StudentifyDatabaseProvider
-                        .getTaskDao(this)
-                        .getTaskWithType(classId, TaskType.TEST.name())
-        );
+    public void refreshTest(boolean isDelete) {
+        if (isDelete)
+            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalTest(classId, -1);
+
+        List<Task> taskWithType = StudentifyDatabaseProvider
+                .getTaskDao(this)
+                .getTaskWithType(classId, TaskType.TEST.name());
+
+        noTest.setVisibility(taskWithType.isEmpty() ? View.VISIBLE : View.GONE);
+        testAdapter.updateList(taskWithType);
     }
 
     @Override
-    public void refreshHomework() {
-        homeworkAdapter.updateList(
-                StudentifyDatabaseProvider
-                        .getTaskDao(this)
-                        .getTaskWithType(classId, TaskType.HOMEWORK.name())
-        );
+    public void refreshHomework(boolean isDelete) {
+        if (isDelete)
+            StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalHomework(classId, -1);
+
+        List<Task> taskWithType = StudentifyDatabaseProvider
+                .getTaskDao(this)
+                .getTaskWithType(classId, TaskType.HOMEWORK.name());
+
+        noHomework.setVisibility(taskWithType.isEmpty() ? View.VISIBLE : View.GONE);
+        homeworkAdapter.updateList(taskWithType);
     }
 
     private void setupTestRV() {

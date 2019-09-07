@@ -1,10 +1,13 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,12 +17,15 @@ import com.google.android.material.textfield.TextInputEditText;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.TimeZone;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.notifications.NotificationHandler;
+import cheema.hardeep.sahibdeep.studentify.notifications.NotificationScheduler;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
@@ -74,6 +80,9 @@ public class ClassInformationActivity extends AppCompatActivity {
     Calendar startTimeCalendar;
     Calendar endTimeCalendar;
 
+    public boolean startTimeCheck = false;
+    public boolean endTimeCheck = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,11 +94,14 @@ public class ClassInformationActivity extends AppCompatActivity {
         cancelButton.setOnClickListener(v -> finish());
         addButton.setOnClickListener(v -> {
             if (fieldCheck())
-                Toast.makeText(this, "Please Fill All The Fields And Select Days", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Fill all the fields, select days and timings", Toast.LENGTH_SHORT).show();
             else {
+                StudentClass studentClass = getClassDetails();
                 StudentifyDatabaseProvider
                         .getStudentClassDao(ClassInformationActivity.this)
-                        .insertStudentClass(getClassDetails());
+                        .insertStudentClass(studentClass);
+                NotificationScheduler.scheduleClassNotification(this, studentClass);
+                NotificationHandler.showStudentClassNotification(this, studentClass);
                 finish();
             }
         });
@@ -104,18 +116,21 @@ public class ClassInformationActivity extends AppCompatActivity {
         startTime.setOnClickListener(v -> {
             startTimeCalendar = Calendar.getInstance();
             DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
-                startTimeCalendar.set(Calendar.HOUR, hour);
+                startTimeCalendar.set(Calendar.HOUR_OF_DAY, hour);
                 startTimeCalendar.set(Calendar.MINUTE, minute);
                 startTime.setText(DateUtils.formatDisplayTime(startTimeCalendar));
             });
+            startTimeCheck = true;
         });
+
         endTime.setOnClickListener(v -> {
             endTimeCalendar = Calendar.getInstance();
             DialogUtil.createTimeDialog(ClassInformationActivity.this, (view, hour, minute) -> {
-                endTimeCalendar.set(Calendar.HOUR, hour);
+                endTimeCalendar.set(Calendar.HOUR_OF_DAY, hour);
                 endTimeCalendar.set(Calendar.MINUTE, minute);
                 endTime.setText(DateUtils.formatDisplayTime(endTimeCalendar));
             });
+            endTimeCheck = true;
         });
     }
 
@@ -149,6 +164,8 @@ public class ClassInformationActivity extends AppCompatActivity {
         return className.getText().toString().isEmpty()
                 || professorName.getText().toString().isEmpty()
                 || roomNumber.getText().toString().isEmpty()
-                || daysList.isEmpty();
+                || daysList.isEmpty()
+                || startTimeCheck == false
+                || endTimeCheck == false;
     }
 }

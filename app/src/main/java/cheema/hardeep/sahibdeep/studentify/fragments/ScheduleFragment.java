@@ -24,7 +24,9 @@ import cheema.hardeep.sahibdeep.studentify.adapters.ScheduleDaysAdapter;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ScheduleInterface;
 import cheema.hardeep.sahibdeep.studentify.models.ScheduleDay;
+import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
+import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +44,9 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
 
     @BindView(R.id.classesRecyclerView)
     RecyclerView classesRecyclerView;
+
+    @BindView(R.id.noClassSchedule)
+    TextView noClassSchedule;
 
     private ScheduleDaysAdapter daysAdapter;
     private ClassAdapter classAdapter;
@@ -63,13 +68,27 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
         classesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         classAdapter = new ClassAdapter(true);
         classesRecyclerView.setAdapter(classAdapter);
-
+        initializeView(getCurrentDay());
         return view;
+    }
+
+    private void initializeView(String day) {
+        List<StudentClass> studentClassesWithDay = StudentifyDatabaseProvider
+                .getStudentClassDao(getContext())
+                .getStudentClassesWithDay(WILDCARD + day + WILDCARD);
+        if (studentClassesWithDay.isEmpty()) {
+            noClassSchedule.setVisibility(View.VISIBLE);
+            classesRecyclerView.setVisibility(View.GONE);
+        } else {
+            noClassSchedule.setVisibility(View.GONE);
+            classesRecyclerView.setVisibility(View.VISIBLE);
+            classAdapter.updateList(studentClassesWithDay);
+        }
     }
 
     @Override
     public void onDaySelected(String day) {
-        classAdapter.updateList(StudentifyDatabaseProvider.getStudentClassDao(getContext()).getStudentClassesWithDay(WILDCARD + day + WILDCARD));
+     initializeView(day);
     }
 
     private List<ScheduleDay> generateDates() {
@@ -82,5 +101,11 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
             cal.add(Calendar.DAY_OF_MONTH, 1);
         }
         return scheduleDays;
+    }
+
+    private String getCurrentDay(){
+        Calendar cal = Calendar.getInstance();
+        String currentDay = DateUtils.formatDisplayDay(cal);
+        return currentDay;
     }
 }

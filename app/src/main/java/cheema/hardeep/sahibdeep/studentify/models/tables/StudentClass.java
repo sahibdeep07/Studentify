@@ -2,13 +2,10 @@ package cheema.hardeep.sahibdeep.studentify.models.tables;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
 import java.util.List;
-
-import static androidx.room.ForeignKey.CASCADE;
 
 @Entity
 public class StudentClass {
@@ -37,6 +34,18 @@ public class StudentClass {
 
     @ColumnInfo(name = "end_time")
     private Date endTime;
+
+    @ColumnInfo(name = "total_homework")
+    private int totalHomework;
+
+    @ColumnInfo(name = "finished_homework")
+    private int finishedHomework = 0;
+
+    @ColumnInfo(name = "total_test")
+    private int totalTest;
+
+    @ColumnInfo(name = "completed_test")
+    private int completedTest = 0;
 
     public int getId() {
         return id;
@@ -100,5 +109,37 @@ public class StudentClass {
 
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
+    }
+
+    public int getTotalHomework() {
+        return totalHomework;
+    }
+
+    public void setTotalHomework(int totalHomework) {
+        this.totalHomework = totalHomework;
+    }
+
+    public int getFinishedHomework() {
+        return finishedHomework;
+    }
+
+    public void setFinishedHomework(int finishedHomework) {
+        this.finishedHomework = finishedHomework;
+    }
+
+    public int getTotalTest() {
+        return totalTest;
+    }
+
+    public void setTotalTest(int totalTest) {
+        this.totalTest = totalTest;
+    }
+
+    public int getCompletedTest() {
+        return completedTest;
+    }
+
+    public void setCompletedTest(int completedTest) {
+        this.completedTest = completedTest;
     }
 }

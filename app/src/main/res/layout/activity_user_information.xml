@@ -137,7 +137,8 @@
                     android:id="@+id/dateOfBirth"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
+                    android:inputType="none"
+                    android:editable="false"
                     android:textColor="@color/primaryTextColor"
                     android:typeface="serif" />
 
@@ -181,7 +182,6 @@
                     android:id="@+id/term"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:inputType="text"
                     android:textColor="@color/primaryTextColor"
                     android:typeface="serif" />

@@ -20,6 +20,18 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/noClass"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Click the Add Button to Add Classes."
+            android:textColor="@color/secondaryTextColor"
+            android:textSize="16sp"
+            app:layout_constraintTop_toTopOf="@id/classDetailRecyclerView"
+            app:layout_constraintBottom_toBottomOf="@id/classDetailRecyclerView"
+            app:layout_constraintStart_toStartOf="@id/classDetailRecyclerView"
+            app:layout_constraintEnd_toEndOf="@id/classDetailRecyclerView"/>
+
+        <TextView
             android:id="@+id/universityName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

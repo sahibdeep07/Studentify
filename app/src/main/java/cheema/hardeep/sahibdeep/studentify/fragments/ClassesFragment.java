@@ -11,6 +11,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
@@ -18,6 +20,7 @@ import cheema.hardeep.sahibdeep.studentify.activities.ClassInformationActivity;
 import cheema.hardeep.sahibdeep.studentify.adapters.ClassAdapter;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ClassesInterface;
+import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 
 public class ClassesFragment extends Fragment implements ClassesInterface {
@@ -33,6 +36,10 @@ public class ClassesFragment extends Fragment implements ClassesInterface {
 
     @BindView(R.id.classDetailRecyclerView)
     RecyclerView classDetailRV;
+
+    @BindView(R.id.noClass)
+    TextView noClass;
+
     private ClassAdapter classAdapter;
 
     @Override
@@ -60,9 +67,18 @@ public class ClassesFragment extends Fragment implements ClassesInterface {
     public void refreshClasses() {
         String termName = DatabaseUtil.getUserInformation(getContext()).getTermName();
         semester.setText(termName);
-        classAdapter.updateList(StudentifyDatabaseProvider
+        List<StudentClass> studentClasses = StudentifyDatabaseProvider
                 .getTermDao(getContext())
                 .getTermWithClasses(termName)
-                .getStudentClasses());
+                .getStudentClasses();
+
+        if (studentClasses.isEmpty()) {
+            noClass.setVisibility(View.VISIBLE);
+            classDetailRV.setVisibility(View.GONE);
+        } else {
+            noClass.setVisibility(View.GONE);
+            classDetailRV.setVisibility(View.VISIBLE);
+            classAdapter.updateList(studentClasses);
+        }
     }
 }

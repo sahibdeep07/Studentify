@@ -21,8 +21,10 @@ import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
 public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHolder> {
 
-    private static final String NONE = "None";
     private static final String HYPEN = " - ";
+    private static final String COMPLETED = "Completed: ";
+    private static final String FINISHED = "Finished: ";
+    private static final String SLASH = "/";
     private boolean isSchedule;
 
     private List<StudentClass> studentClassList = new ArrayList<>();
@@ -55,8 +57,8 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         holder.professorName.setText(studentClass.getProfessorName());
         holder.roomNumber.setText(studentClass.getRoomNumber());
         holder.time.setText(getStartEndDisplayTime(studentClass));
-        holder.test.setText(NONE);
-        holder.homework.setText(NONE);
+        holder.test.setText(getCompletedTestSting(studentClass));
+        holder.homework.setText(getFinishedHomeworkString(studentClass));
         holder.itemView.setOnClickListener(v ->
                 v.getContext().startActivity(TasksActivity.createIntent(v.getContext(), studentClass.getId()))
         );
@@ -71,6 +73,14 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
                 return true;
             });
         }
+    }
+
+    private String getCompletedTestSting(StudentClass studentClass) {
+        return COMPLETED + studentClass.getCompletedTest() + SLASH + studentClass.getTotalTest();
+    }
+
+    private String getFinishedHomeworkString(StudentClass studentClass) {
+        return FINISHED + studentClass.getFinishedHomework() + SLASH + studentClass.getTotalHomework();
     }
 
     private String getStartEndDisplayTime(StudentClass studentClass) {

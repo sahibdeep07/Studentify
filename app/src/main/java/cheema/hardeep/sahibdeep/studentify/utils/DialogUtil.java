@@ -51,4 +51,13 @@ public class DialogUtil {
         datePicker.getDatePicker().setMinDate(currentTime.getTimeInMillis() - THOUSAND);
         datePicker.show();
     }
+
+    public static void createDobDateDialog(Context context, DatePickerDialog.OnDateSetListener listener) {
+        Calendar currentTime = Calendar.getInstance();
+        int year = currentTime.get(Calendar.YEAR);
+        int month = currentTime.get(Calendar.MONTH);
+        int dayOfMonth = currentTime.get(Calendar.DAY_OF_MONTH);
+        DatePickerDialog datePicker = new DatePickerDialog(context, listener, year, month, dayOfMonth);
+        datePicker.show();
+    }
 }

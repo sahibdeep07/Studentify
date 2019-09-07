@@ -2,15 +2,10 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 import cheema.hardeep.sahibdeep.studentify.R;
@@ -19,8 +14,11 @@ import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.TermDetails;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
-import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
-import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
+import cheema.hardeep.sahibdeep.studentify.notifications.NotificationHandler;
+import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
+
+import static cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider.getTermDao;
 
 public class SplashActivity extends AppCompatActivity {
     final static int TRANSITION_TIME = 2000;
