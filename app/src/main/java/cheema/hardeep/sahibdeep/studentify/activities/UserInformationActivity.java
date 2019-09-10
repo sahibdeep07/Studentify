@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Toast;
@@ -121,30 +122,41 @@ public class UserInformationActivity extends AppCompatActivity {
                     }
                 })
         );
-        term.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                DialogUtil.createTermDialog(v.getContext(), termItems, (dialog, which) -> {
-                    int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                    term.setText(termItems[selectedPosition]);
-                    dialog.dismiss();
-                });
+
+        term.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                termDialog(v);
+                term.setOnClickListener(v12 -> termDialog(v12));
             }
-            return true;
         });
 
-        dob.setOnTouchListener((v, event) -> {
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                DialogUtil.createDobDateDialog(UserInformationActivity.this, (view, year, month, dayOfMonth) -> {
-                    userDob = Calendar.getInstance();
-                    userDob.set(Calendar.YEAR, year);
-                    userDob.set(Calendar.MONTH, month);
-                    userDob.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    dob.setText(DateUtils.formatDisplayDate(userDob));
-                });
+        dob.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                dobDialog();
+                dob.setOnClickListener(v1 -> dobDialog());
             }
-            return false;
         });
-        
+
+    }
+
+    private void termDialog(View v) {
+        DialogUtil.createTermDialog(v.getContext(), termItems, (dialog, which) -> {
+            ((InputMethodManager) UserInformationActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(term.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+            term.setText(termItems[selectedPosition]);
+            dialog.dismiss();
+        });
+    }
+
+    private void dobDialog() {
+        ((InputMethodManager) UserInformationActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(dob.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        DialogUtil.createDobDateDialog(UserInformationActivity.this, (view, year, month, dayOfMonth) -> {
+            userDob = Calendar.getInstance();
+            userDob.set(Calendar.YEAR, year);
+            userDob.set(Calendar.MONTH, month);
+            userDob.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            dob.setText(DateUtils.formatDisplayDate(userDob));
+        });
     }
 
     private void clearTerm() {
@@ -177,7 +189,6 @@ public class UserInformationActivity extends AppCompatActivity {
         else return false;
     }
 
-    //TODO: Duration of Term
     public Term getTerm(String termName) {
         Term term = new Term();
         term.setName(termName);
