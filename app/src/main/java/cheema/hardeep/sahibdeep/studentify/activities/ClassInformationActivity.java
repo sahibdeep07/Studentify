@@ -97,11 +97,11 @@ public class ClassInformationActivity extends AppCompatActivity {
                 Toast.makeText(this, "Fill all the fields, select days and timings", Toast.LENGTH_SHORT).show();
             else {
                 StudentClass studentClass = getClassDetails();
-                StudentifyDatabaseProvider
+                int classId = StudentifyDatabaseProvider
                         .getStudentClassDao(ClassInformationActivity.this)
-                        .insertStudentClass(studentClass);
+                        .insertStudentClass(studentClass).intValue();
+                studentClass.setId(classId);
                 NotificationScheduler.scheduleClassNotification(this, studentClass);
-                NotificationHandler.showStudentClassNotification(this, studentClass);
                 finish();
             }
         });

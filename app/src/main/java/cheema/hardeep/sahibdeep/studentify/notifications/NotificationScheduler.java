@@ -8,59 +8,57 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import androidx.work.Data;
-import androidx.work.ExistingPeriodicWorkPolicy;
-import androidx.work.ExistingWorkPolicy;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.PeriodicWorkRequest;
-import androidx.work.WorkManager;
-
-import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.util.Locale;
 
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
-import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 
 import static android.content.Context.ALARM_SERVICE;
 
 public class NotificationScheduler {
 
-    private static final String NOTIFICATION_CLASS_WORKER = "notification-class-worker";
-    private static final String NOTIFICATION_TASK_WORKER = "notification-task-worker";
     public static final String KEY_STUDENT_CLASS_ID = "key-student-class-id";
     public static final String KEY_TASK_ID = "key-task-id";
 
-    private static final int STUDENT_CLASS_REMINDER_TIME_OFFSET = -15;
-    private static final int TASK_REMINDER_TIME_OFFSET = 1000 * 60 * 15;
-    private static final int ONE_SECOND = 1000;
-    private static final int ONE_DAY_HOURS = 24;
+    private static final int THOUSAND = 1000;
+    private static final int SIXTY = 60;
+    private static final int FIFTEEN = 15;
+    private static final int TWELVE = 12;
     private static final int SEVEN = 7;
+    private static final int STUDENT_CLASS_REMINDER_TIME_OFFSET = THOUSAND * SIXTY * FIFTEEN;
+    private static final int TASK_REMINDER_TIME_OFFSET = THOUSAND * SIXTY * SIXTY * TWELVE;
 
     public static void scheduleClassNotification(Context context, StudentClass studentClass) {
         Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling...");
-        Data inputData = new Data.Builder()
-                .putInt(KEY_STUDENT_CLASS_ID, studentClass.getId())
-                .build();
+        setupPackageManager(context);
 
+        for (String day : studentClass.getDays()) {
+            Intent intent = new Intent(context, NotificationReceiver.class);
+            intent.putExtra(KEY_STUDENT_CLASS_ID, studentClass.getId());
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    studentClass.getStartTime().getTime() - STUDENT_CLASS_REMINDER_TIME_OFFSET,
+                    AlarmManager.INTERVAL_DAY * SEVEN,
+                    pendingIntent
+            );
+        }
 
-        long delay = calculateDelay(studentClass.getStartTime(), STUDENT_CLASS_REMINDER_TIME_OFFSET);
-        PeriodicWorkRequest periodicWorkRequest =
-                new PeriodicWorkRequest
-                        .Builder(StudentifyWorker.class, SEVEN, TimeUnit.DAYS)
-                        .setInitialDelay(delay, TimeUnit.SECONDS)
-                        .setInputData(inputData)
-                        .addTag(NOTIFICATION_CLASS_WORKER)
-                        .build();
-
-        WorkManager.getInstance(context)
-                .enqueueUniquePeriodicWork(NOTIFICATION_CLASS_WORKER, ExistingPeriodicWorkPolicy.KEEP, periodicWorkRequest);
         Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling Complete");
+    }
+
+    private static int parseDayOfWeek(String day, Locale locale)
+            throws ParseException {
+        SimpleDateFormat dayFormat = new SimpleDateFormat("E", locale);
+        Date date = dayFormat.parse(day);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     public static void scheduleTaskNotification(Context context, Task task) {
@@ -84,29 +82,5 @@ public class NotificationScheduler {
                         PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
                         PackageManager.DONT_KILL_APP
                 );
-    }
-
-    /**
-     * Worker runs with set intervals, for example everyday or every 7 days
-     * In order to ensure that work runs at specific time then after that keep running with 7 days delay in between
-     * we have to provide initial delay
-     * For example
-     * If current time is 5pm and we want to show notification 8pm every week on monday
-     * - We need to make sure we have initial day of 3 hours (calculated by startTime - currentTime)
-     * - Once that delay is over, the worker will run from that time every week
-     */
-    private static long calculateDelay(Date startTime, int offset) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startTime);
-        calendar.add(Calendar.MINUTE, offset);
-
-        long delta;
-        if (calendar.getTime().getTime() < System.currentTimeMillis()) {
-            calendar.add(Calendar.HOUR, ONE_DAY_HOURS);
-            delta = (calendar.getTimeInMillis() - System.currentTimeMillis()) / ONE_SECOND;
-        } else {
-            delta = (calendar.getTimeInMillis() - System.currentTimeMillis()) / ONE_SECOND;
-        }
-        return delta;
     }
 }
