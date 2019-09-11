@@ -1,10 +1,16 @@
 package cheema.hardeep.sahibdeep.studentify.notifications;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.util.Log;
 
 import androidx.work.Data;
 import androidx.work.ExistingPeriodicWorkPolicy;
+import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
@@ -21,6 +27,8 @@ import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 
+import static android.content.Context.ALARM_SERVICE;
+
 public class NotificationScheduler {
 
     private static final String NOTIFICATION_CLASS_WORKER = "notification-class-worker";
@@ -29,7 +37,7 @@ public class NotificationScheduler {
     public static final String KEY_TASK_ID = "key-task-id";
 
     private static final int STUDENT_CLASS_REMINDER_TIME_OFFSET = -15;
-    private static final int TASK_REMINDER_TIME_OFFSET = -720;
+    private static final int TASK_REMINDER_TIME_OFFSET = 1000 * 60 * 15;
     private static final int ONE_SECOND = 1000;
     private static final int ONE_DAY_HOURS = 24;
     private static final int SEVEN = 7;
@@ -39,20 +47,6 @@ public class NotificationScheduler {
         Data inputData = new Data.Builder()
                 .putInt(KEY_STUDENT_CLASS_ID, studentClass.getId())
                 .build();
-
-//        for (String days : studentClass.getDays()
-//             ) {
-//
-//            SimpleDateFormat sdf = new SimpleDateFormat("EEE, hh:mm a");
-//            Date date = null;
-//            try {
-//                date = sdf.parse(days);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(date);
-//        }
 
 
         long delay = calculateDelay(studentClass.getStartTime(), STUDENT_CLASS_REMINDER_TIME_OFFSET);
@@ -71,21 +65,25 @@ public class NotificationScheduler {
 
     public static void scheduleTaskNotification(Context context, Task task) {
         Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling...");
-        Data inputData = new Data.Builder().putInt(KEY_TASK_ID, task.getId()).build();
+        setupPackageManager(context);
 
-        long initDelay = task.getDateTime().getTime() - System.currentTimeMillis();
-        //How do we introduce last reminder offset?
+        Intent intent = new Intent(context, NotificationReceiver.class);
+        intent.putExtra(KEY_TASK_ID, task.getId());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, task.getDateTime().getTime() - TASK_REMINDER_TIME_OFFSET, pendingIntent);
 
-        OneTimeWorkRequest oneTimeWorkRequest =
-                new OneTimeWorkRequest
-                        .Builder(StudentifyWorker.class)
-                        .setInitialDelay(initDelay, TimeUnit.MILLISECONDS)
-                        .setInputData(inputData)
-                        .addTag(NOTIFICATION_TASK_WORKER)
-                        .build();
+        Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling Complete!");
+    }
 
-        WorkManager.getInstance(context).enqueue(oneTimeWorkRequest);
-        Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling Complete");
+    private static void setupPackageManager(Context context) {
+        context
+                .getPackageManager()
+                .setComponentEnabledSetting(
+                        new ComponentName(context, NotificationReceiver.class),
+                        PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                        PackageManager.DONT_KILL_APP
+                );
     }
 
     /**

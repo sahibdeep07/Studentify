@@ -31,7 +31,7 @@ public interface TaskDao {
     List<Task> getTaskWithType(int studentClassId, String taskType);
 
     @Update
-    int upddateTask(Task task);
+    int updateTask(Task task);
 
     @Delete
     void deleteTask(Task task);

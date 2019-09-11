@@ -54,6 +54,15 @@ public class NotificationHandler {
         );
     }
 
+    public static void showDummyNotification(Context context, String task) {
+        showNotification(context,
+                task,
+                task,
+                R.drawable.add_icon_64,
+                generateTaskActivityPendingIntent(context, 7897498)
+        );
+    }
+
     private static void showNotification(Context context, String title, String body, int iconId, PendingIntent contentIntent) {
         createNotificationChannel(context);
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context, CHANNEL_ID)

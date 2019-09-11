@@ -1,26 +1,19 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.TimePicker;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
-import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
-import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
@@ -78,31 +71,35 @@ public class TasksDetailsActivity extends AppCompatActivity {
         if (taskId != NEGATIVE_TASK_ID) setTaskData();
 
         cancelButton.setOnClickListener(v -> finish());
-        addButton.setOnClickListener(v -> {
-            Task task = getTask();
-            if (taskId == NEGATIVE_TASK_ID) {
-                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(task);
-                incrementStudentClassTaskCount();
-            } else {
-                StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).upddateTask(task);
-            }
-            NotificationScheduler.scheduleTaskNotification(this, task);
-            finish();
-        });
+        addButton.setOnClickListener(v -> handleAddButton());
+        time.setOnClickListener(v -> handleTimeButton());
+    }
 
-        time.setOnClickListener(v -> {
-            userDateTime = Calendar.getInstance();
-            DialogUtil.createDateDialog(this, (datePicker, year, month, dayOfMonth) -> {
-                userDateTime.set(Calendar.YEAR, year);
-                userDateTime.set(Calendar.MONTH, month);
-                userDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                DialogUtil.createTimeDialog(TasksDetailsActivity.this, (timePicker, hour, minute) -> {
-                    userDateTime.set(Calendar.HOUR_OF_DAY, hour);
-                    userDateTime.set(Calendar.MINUTE, minute);
-                    time.setText(DateUtils.formatDisplayDateTime(userDateTime));
-                });
+    private void handleTimeButton() {
+        userDateTime = Calendar.getInstance();
+        DialogUtil.createDateDialog(this, (datePicker, year, month, dayOfMonth) -> {
+            userDateTime.set(Calendar.YEAR, year);
+            userDateTime.set(Calendar.MONTH, month);
+            userDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            DialogUtil.createTimeDialog(TasksDetailsActivity.this, (timePicker, hour, minute) -> {
+                userDateTime.set(Calendar.HOUR_OF_DAY, hour);
+                userDateTime.set(Calendar.MINUTE, minute);
+                time.setText(DateUtils.formatDisplayDateTime(userDateTime));
             });
         });
+    }
+
+    private void handleAddButton() {
+        Task task = getTask();
+        if (taskId == NEGATIVE_TASK_ID) {
+            taskId = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(task).intValue();
+            incrementStudentClassTaskCount();
+        } else {
+            taskId = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).updateTask(task);
+        }
+        task.setId(taskId);
+        NotificationScheduler.scheduleTaskNotification(this, task);
+        finish();
     }
 
     private void incrementStudentClassTaskCount() {
