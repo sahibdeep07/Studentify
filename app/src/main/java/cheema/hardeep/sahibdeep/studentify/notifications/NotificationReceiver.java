@@ -20,8 +20,6 @@ public class NotificationReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.d(NotificationReceiver.class.getSimpleName(), "Notification Data Received...");
-        String task = intent.getStringExtra("task");
-        NotificationHandler.showDummyNotification(context, task);
 
         int classId = intent.getIntExtra(KEY_STUDENT_CLASS_ID, NEGATIVE_ONE);
         int taskId = intent.getIntExtra(KEY_TASK_ID, NEGATIVE_ONE);
