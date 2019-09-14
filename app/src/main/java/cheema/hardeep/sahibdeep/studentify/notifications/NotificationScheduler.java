@@ -41,12 +41,12 @@ public class NotificationScheduler {
             intent.putExtra(KEY_STUDENT_CLASS_ID, studentClass.getId());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-            alarmManager.setRepeating(
-                    AlarmManager.RTC_WAKEUP,
-                    studentClass.getStartTime().getTime() - STUDENT_CLASS_REMINDER_TIME_OFFSET,
-                    AlarmManager.INTERVAL_DAY * SEVEN,
-                    pendingIntent
-            );
+//            alarmManager.setRepeating(
+//                    AlarmManager.RTC_WAKEUP,
+//                    studentClass.getStartTime().getTime() - STUDENT_CLASS_REMINDER_TIME_OFFSET,
+//                    AlarmManager.INTERVAL_DAY * SEVEN,
+//                    pendingIntent
+//            );
         }
 
         Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling Complete");
@@ -67,6 +67,7 @@ public class NotificationScheduler {
 
         Intent intent = new Intent(context, NotificationReceiver.class);
         intent.putExtra(KEY_TASK_ID, task.getId());
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, task.getDateTime().getTime() - TASK_REMINDER_TIME_OFFSET, pendingIntent);

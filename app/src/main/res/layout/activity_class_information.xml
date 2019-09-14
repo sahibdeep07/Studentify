@@ -133,44 +133,66 @@
                 app:layout_constraintStart_toEndOf="@+id/fridayButton"
                 app:layout_constraintTop_toBottomOf="@id/roomNumberContainer" />
 
-            <TextView
-                android:id="@+id/startTime"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/transparent_curved_button"
-                android:gravity="center"
-                android:text="@string/start_time"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="16sp"
-                android:typeface="serif"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/endTime"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/mondayButton" />
 
-            <TextView
-                android:id="@+id/endTime"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginRight="12dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/transparent_curved_button"
-                android:gravity="center"
-                android:padding="12dp"
-                android:text="@string/end_time"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="16sp"
-                android:typeface="serif"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/startTime"
-                app:layout_constraintTop_toBottomOf="@id/mondayButton" />
+                <cheema.hardeep.sahibdeep.studentify.views.DayTimeView
+                    android:id="@+id/dayTimeView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/mondayButton"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+<!--            <TextView-->
+<!--                android:id="@+id/dayLabel"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:textColor="@color/primaryTextColor"-->
+<!--                android:textSize="14sp"-->
+<!--                android:layout_marginLeft="12dp"-->
+<!--                app:layout_constraintBottom_toBottomOf="@id/startTime"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/mondayButton"-->
+<!--                app:layout_constraintTop_toTopOf="@id/startTime"-->
+<!--                tools:text="MON" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/startTime"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginBottom="16dp"-->
+<!--                android:layout_marginLeft="12dp"-->
+<!--                android:layout_marginRight="6dp"-->
+<!--                android:background="@drawable/transparent_curved_button"-->
+<!--                android:gravity="center"-->
+<!--                android:text="@string/start_time"-->
+<!--                android:textColor="@color/primaryTextColor"-->
+<!--                android:textSize="16sp"-->
+<!--                android:typeface="serif"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintStart_toEndOf="@id/dayLabel"-->
+<!--                app:layout_constraintEnd_toStartOf="@id/endTime"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/mondayButton" />-->
+
+<!--            <TextView-->
+<!--                android:id="@+id/endTime"-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="16dp"-->
+<!--                android:layout_marginBottom="16dp"-->
+<!--                android:layout_marginLeft="6dp"-->
+<!--                android:layout_marginRight="12dp"-->
+<!--                android:background="@drawable/transparent_curved_button"-->
+<!--                android:gravity="center"-->
+<!--                android:padding="12dp"-->
+<!--                android:text="@string/end_time"-->
+<!--                android:textColor="@color/primaryTextColor"-->
+<!--                android:textSize="16sp"-->
+<!--                android:typeface="serif"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toEndOf="@id/startTime"-->
+<!--                app:layout_constraintTop_toBottomOf="@id/mondayButton" />-->
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/classNameContainer"
