@@ -40,7 +40,6 @@ public class NotificationHandler {
         showNotification(context,
                 studentClass.getName(),
                 getClassNotificationBody(studentClass.getProfessorName(), studentClass.getRoomNumber()),
-                R.drawable.add_icon_64,
                 generateHomeActivityPendingIntent(context)
         );
     }
@@ -49,18 +48,17 @@ public class NotificationHandler {
         showNotification(context,
                 task.getName(),
                 getTaskNotificationBody(task.getType(), task.getNotes()),
-                R.drawable.add_icon_64,
                 generateTaskActivityPendingIntent(context, task.getStudentClassId())
         );
     }
 
-    private static void showNotification(Context context, String title, String body, int iconId, PendingIntent contentIntent) {
+    private static void showNotification(Context context, String title, String body, PendingIntent contentIntent) {
         createNotificationChannel(context);
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setStyle(new NotificationCompat.BigTextStyle().bigText(body))
-                .setSmallIcon(iconId)
+                .setSmallIcon(R.drawable.alarm_clock_app_icon)
                 .setContentIntent(contentIntent)
                 .setAutoCancel(true);
 
