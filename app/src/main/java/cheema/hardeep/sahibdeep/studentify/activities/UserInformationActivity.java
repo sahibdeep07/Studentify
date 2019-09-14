@@ -2,16 +2,12 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +34,7 @@ public class UserInformationActivity extends AppCompatActivity {
         return new Intent(context, UserInformationActivity.class);
     }
 
+    public static final String EMPTY = "";
     public static final String EVEN_SEMESTER = "Even Semester";
     public static final String ODD_SEMESTER = "Odd Semester";
 
@@ -93,34 +90,9 @@ public class UserInformationActivity extends AppCompatActivity {
             setUserInformation();
         }
 
-        saveButton.setOnClickListener(v -> {
-            if (fieldCheck())
-                Toast.makeText(this, "Please Fill All The Fields", Toast.LENGTH_SHORT).show();
-            else {
-                UserInformation userInfo = getUserInformation();
-                StudentifyDatabaseProvider.getUserInformationDao(this).insertUserInformation(userInfo);
-                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
-                SharedPreferencesProvider.saveUserId(this, userInfo.getStudentId());
-                SharedPreferencesProvider.saveFirstLaunchCompleted(this);
-                startActivity(HomeActivity.createIntent(UserInformationActivity.this));
-                finish();
-            }
-        });
+        saveButton.setOnClickListener(v -> handleSaveUpdateButton());
 
-        clearTermButton.setOnClickListener(v -> DialogUtil.createDeleteConfirmationDialog(this, (dialog, which) -> {
-                    clearTerm();
-                    if (fieldCheck())
-                        Toast.makeText(UserInformationActivity.this, "Please Fill All The Fields", Toast.LENGTH_SHORT).show();
-                    else {
-                        UserInformation userInfo = getUserInformation();
-                        StudentifyDatabaseProvider.getUserInformationDao(UserInformationActivity.this).insertUserInformation(userInfo);
-                        StudentifyDatabaseProvider.getTermDao(UserInformationActivity.this).insertTerm(getTerm(userInfo.getTermName()));
-                        SharedPreferencesProvider.saveUserId(UserInformationActivity.this, userInfo.getStudentId());
-                        SharedPreferencesProvider.saveFirstLaunchCompleted(UserInformationActivity.this);
-                        startActivity(HomeActivity.createIntent(UserInformationActivity.this));
-                        finish();
-                    }
-                })
+        clearTermButton.setOnClickListener(v -> DialogUtil.createDeleteConfirmationDialog(this, (dialog, which) -> clearTerm())
         );
 
         term.setOnFocusChangeListener((v, hasFocus) -> {
@@ -137,6 +109,25 @@ public class UserInformationActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void handleSaveUpdateButton() {
+        if (fieldCheck())
+            Toast.makeText(this, "Please Fill All The Fields", Toast.LENGTH_SHORT).show();
+        else {
+            UserInformation userInfo = getUserInformation();
+            if (SharedPreferencesProvider.isFirstLaunch(this)) {
+                StudentifyDatabaseProvider.getUserInformationDao(this).insertUserInformation(userInfo);
+                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
+                SharedPreferencesProvider.saveUserId(this, userInfo.getStudentId());
+                SharedPreferencesProvider.saveFirstLaunchCompleted(this);
+            } else {
+                StudentifyDatabaseProvider.getUserInformationDao(this).updateUserInformation(userInfo);
+                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
+            }
+            startActivity(HomeActivity.createIntent(UserInformationActivity.this));
+            finish();
+        }
     }
 
     private void termDialog(View v) {
@@ -163,6 +154,7 @@ public class UserInformationActivity extends AppCompatActivity {
         StudentifyDatabaseProvider.getTaskDao(this).deleteAll();
         StudentifyDatabaseProvider.getTermDao(this).deleteAll();
         StudentifyDatabaseProvider.getStudentClassDao(this).deleteAll();
+        term.setText(EMPTY);
     }
 
     public UserInformation getUserInformation() {
@@ -178,15 +170,13 @@ public class UserInformationActivity extends AppCompatActivity {
     }
 
     public boolean fieldCheck() {
-        if (name.getText().toString().isEmpty()
+        return name.getText().toString().isEmpty()
                 || collegeName.getText().toString().isEmpty()
                 || studentID.getText().toString().isEmpty()
                 || phoneNumber.getText().toString().isEmpty()
                 || dob.getText().toString().isEmpty()
                 || address.getText().toString().isEmpty()
-                || term.getText().toString().isEmpty())
-            return true;
-        else return false;
+                || term.getText().toString().isEmpty();
     }
 
     public Term getTerm(String termName) {
