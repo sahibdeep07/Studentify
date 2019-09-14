@@ -66,16 +66,20 @@
 
         <TextView
             android:id="@+id/itemProfessorName"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
             android:text="TextView"
             android:textSize="16sp"
             android:textColor="@color/secondaryTextColor"
             android:typeface="serif"
+            android:maxLines="1"
+            android:ellipsize="end"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/professor" />
+            app:layout_constraintTop_toBottomOf="@id/professor"
+            app:layout_constraintEnd_toStartOf="@id/verticalView"/>
 
         <TextView
             android:id="@+id/itemHomeworkResult"
@@ -111,16 +115,21 @@
 
         <TextView
             android:id="@+id/itemTimeResult"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="2dp"
+            android:layout_marginEnd="2dp"
             android:text="TextView"
             android:textSize="16sp"
+            android:ellipsize="end"
+            android:maxLines="1"
             android:textColor="@color/secondaryTextColor"
             android:typeface="serif"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/itemTime" />
+            app:layout_constraintTop_toBottomOf="@id/itemTime"
+            app:layout_constraintEnd_toStartOf="@id/verticalView"
+            />
 
         <TextView
             android:id="@+id/itemTestsResult"

@@ -3,7 +3,10 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -72,16 +75,22 @@ public class TasksDetailsActivity extends AppCompatActivity {
 
         cancelButton.setOnClickListener(v -> finish());
         addButton.setOnClickListener(v -> handleAddButton());
-        time.setOnClickListener(v -> handleTimeButton());
+        time.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                handleTimeButton(v);
+                time.setOnClickListener(v1 -> handleTimeButton(v1));
+            }
+        });
     }
 
-    private void handleTimeButton() {
+    private void handleTimeButton(View v) {
+        ((InputMethodManager) TasksDetailsActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(time.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         userDateTime = Calendar.getInstance();
-        DialogUtil.createDateDialog(this, (datePicker, year, month, dayOfMonth) -> {
+        DialogUtil.createDateDialog(v.getContext(), (datePicker, year, month, dayOfMonth) -> {
             userDateTime.set(Calendar.YEAR, year);
             userDateTime.set(Calendar.MONTH, month);
             userDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            DialogUtil.createTimeDialog(TasksDetailsActivity.this, (timePicker, hour, minute) -> {
+            DialogUtil.createTimeDialog(v.getContext(), (timePicker, hour, minute) -> {
                 userDateTime.set(Calendar.HOUR_OF_DAY, hour);
                 userDateTime.set(Calendar.MINUTE, minute);
                 time.setText(DateUtils.formatDisplayDateTime(userDateTime));
@@ -90,22 +99,26 @@ public class TasksDetailsActivity extends AppCompatActivity {
     }
 
     private void handleAddButton() {
-        Task task = getTask();
-        if (taskId == NEGATIVE_TASK_ID) {
-            taskId = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(task).intValue();
-            incrementStudentClassTaskCount();
-        } else {
-            taskId = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).updateTask(task);
+        if (fieldCheck())
+            Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show();
+        else {
+            Task task = getTask();
+            if (taskId == NEGATIVE_TASK_ID) {
+                taskId = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(task).intValue();
+                incrementStudentClassTaskCount();
+            } else {
+                taskId = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).updateTask(task);
+            }
+            task.setId(taskId);
+            NotificationScheduler.scheduleTaskNotification(this, task);
+            finish();
         }
-        task.setId(taskId);
-        NotificationScheduler.scheduleTaskNotification(this, task);
-        finish();
     }
 
     private void incrementStudentClassTaskCount() {
-        if(taskType == TaskType.HOMEWORK) {
+        if (taskType == TaskType.HOMEWORK) {
             StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalHomework(classId, 1);
-        } else if(taskType == TaskType.TEST) {
+        } else if (taskType == TaskType.TEST) {
             StudentifyDatabaseProvider.getStudentClassDao(this).updateStudentClassTotalTest(classId, 1);
         }
     }
@@ -128,5 +141,13 @@ public class TasksDetailsActivity extends AppCompatActivity {
         calendar.setTimeInMillis(task.getDateTime().getTime());
         userDateTime = calendar;
         time.setText(DateUtils.formatDisplayDateTime(userDateTime));
+    }
+
+    public boolean fieldCheck() {
+        if (taskName.getText().toString().isEmpty()
+                || notes.getText().toString().isEmpty()
+                || !time.getText().toString().contains("M")
+        ) return true;
+        else return false;
     }
 }
