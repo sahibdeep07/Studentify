@@ -182,7 +182,8 @@
                     android:id="@+id/term"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
+                    android:inputType="none"
+                    android:editable="false"
                     android:textColor="@color/primaryTextColor"
                     android:typeface="serif" />
 
