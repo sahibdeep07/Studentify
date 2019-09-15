@@ -1,5 +1,6 @@
 package cheema.hardeep.sahibdeep.studentify.adapters;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
+
 public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHolder> {
 
     private static final String HYPEN = " - ";
@@ -31,6 +33,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
     private boolean isSchedule;
 
     private List<StudentClass> studentClassList = new ArrayList<>();
+    private String selectedDay;
     private ClassesInterface classesInterface;
 
     public ClassAdapter(boolean isSchedule) {
@@ -43,6 +46,12 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
 
     public void updateList(List<StudentClass> studentClassList) {
         this.studentClassList = studentClassList;
+        notifyDataSetChanged();
+    }
+
+    public void updateListWithDays(List<StudentClass> studentClassList, String selectedDay) {
+        this.studentClassList = studentClassList;
+        this.selectedDay = selectedDay;
         notifyDataSetChanged();
     }
 
@@ -59,7 +68,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         holder.classTitle.setText(studentClass.getName());
         holder.professorName.setText(studentClass.getProfessorName());
         holder.roomNumber.setText(studentClass.getRoomNumber());
-        holder.time.setText(getStartEndDisplayTime(studentClass));
+        holder.time.setText(isSchedule ? getTimeForSchedule(studentClass) : getStartEndDisplayTime(studentClass));
         holder.test.setText(getCompletedTestSting(studentClass));
         holder.homework.setText(getFinishedHomeworkString(studentClass));
         holder.itemView.setOnClickListener(v ->
@@ -76,6 +85,15 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
                 return true;
             });
         }
+    }
+
+    private String getTimeForSchedule(StudentClass studentClass) {
+        for (DayTime dayTime : studentClass.getDayTimes()) {
+            if (dayTime.getDay().equals(selectedDay)) {
+                return dayTime.getStartTime() + HYPEN + dayTime.getEndTime();
+            }
+        }
+        return null;
     }
 
     private String getCompletedTestSting(StudentClass studentClass) {
