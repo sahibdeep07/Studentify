@@ -1,7 +1,5 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
-import android.content.Intent;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

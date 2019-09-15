@@ -8,13 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.Locale;
 
 import cheema.hardeep.sahibdeep.studentify.models.DayTime;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
@@ -42,8 +36,10 @@ public class NotificationScheduler {
 
         for(DayTime dayTime: studentClass.getDayTimes()) {
             Calendar dayTimeCalendar = getNextDayDate(dayTime);
+
             Intent intent = new Intent(context, NotificationReceiver.class);
             intent.putExtra(KEY_STUDENT_CLASS_ID, studentClass.getId());
+
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
             alarmManager.setRepeating(
@@ -66,7 +62,11 @@ public class NotificationScheduler {
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, task.getDateTime().getTime() - TASK_REMINDER_TIME_OFFSET, pendingIntent);
+        alarmManager.setExact(
+                AlarmManager.RTC_WAKEUP,
+                task.getDateTime().getTime() - TASK_REMINDER_TIME_OFFSET,
+                pendingIntent
+        );
 
         Log.d(NotificationScheduler.class.getSimpleName(), "Task Scheduling Complete!");
     }
