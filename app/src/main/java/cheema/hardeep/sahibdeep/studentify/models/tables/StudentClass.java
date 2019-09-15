@@ -5,7 +5,11 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import cheema.hardeep.sahibdeep.studentify.models.DayTime;
 
 @Entity
 public class StudentClass {
@@ -29,11 +33,8 @@ public class StudentClass {
     @ColumnInfo(name = "days")
     private List<String> days;
 
-    @ColumnInfo(name = "start_time")
-    private Date startTime;
-
-    @ColumnInfo(name = "end_time")
-    private Date endTime;
+    @ColumnInfo(name = "day_time")
+    private List<DayTime> dayTimes;
 
     @ColumnInfo(name = "total_homework")
     private int totalHomework;
@@ -95,20 +96,12 @@ public class StudentClass {
         this.days = days;
     }
 
-    public Date getStartTime() {
-        return startTime;
+    public List<DayTime> getDayTimes() {
+        return dayTimes;
     }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
+    public void setDayTimes(List<DayTime> dayTimes) {
+        this.dayTimes = dayTimes;
     }
 
     public int getTotalHomework() {

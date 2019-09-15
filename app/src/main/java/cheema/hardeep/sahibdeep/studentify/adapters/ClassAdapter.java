@@ -15,6 +15,7 @@ import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.activities.TasksActivity;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ClassesInterface;
+import cheema.hardeep.sahibdeep.studentify.models.DayTime;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
@@ -25,6 +26,8 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
     private static final String COMPLETED = "Completed: ";
     private static final String FINISHED = "Finished: ";
     private static final String SLASH = "/";
+    private static final String COLON = ": ";
+    private static final String NEW_LINE = "\n";
     private boolean isSchedule;
 
     private List<StudentClass> studentClassList = new ArrayList<>();
@@ -84,7 +87,17 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
     }
 
     private String getStartEndDisplayTime(StudentClass studentClass) {
-        return DateUtils.formatDisplayTime(studentClass.getStartTime()) + HYPEN + DateUtils.formatDisplayTime(studentClass.getEndTime());
+        StringBuilder stringBuilder = new StringBuilder();
+        for (DayTime dayTime : studentClass.getDayTimes()) {
+            stringBuilder
+                    .append(dayTime.getDay().charAt(0))
+                    .append(COLON)
+                    .append(dayTime.getStartTime())
+                    .append(HYPEN)
+                    .append(dayTime.getEndTime())
+                    .append(NEW_LINE);
+        }
+        return stringBuilder.toString();
     }
 
     @Override

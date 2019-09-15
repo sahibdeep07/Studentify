@@ -1,25 +1,18 @@
 package cheema.hardeep.sahibdeep.studentify.activities;
 
-import android.annotation.SuppressLint;
-import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -67,7 +60,6 @@ public class TasksDetailsActivity extends AppCompatActivity {
     TaskType taskType;
     Calendar userDateTime = Calendar.getInstance();
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,31 +74,16 @@ public class TasksDetailsActivity extends AppCompatActivity {
         if (taskId != NEGATIVE_TASK_ID) setTaskData();
 
         cancelButton.setOnClickListener(v -> finish());
-        addButton.setOnClickListener(v -> {
-            if (fieldCheck())
-                Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show();
-            else {
-                Task task = getTask();
-                if (taskId == NEGATIVE_TASK_ID) {
-                    StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(task);
-                    incrementStudentClassTaskCount();
-                } else {
-                    StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).upddateTask(task);
-                }
-                NotificationScheduler.scheduleTaskNotification(this, task);
-                finish();
-            }
-        });
-
+        addButton.setOnClickListener(v -> handleAddButton());
         time.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
-                timeDialog(v);
-                time.setOnClickListener(v1 -> timeDialog(v1));
+                handleTimeButton(v);
+                time.setOnClickListener(v1 -> handleTimeButton(v1));
             }
         });
     }
 
-    private void timeDialog(View v) {
+    private void handleTimeButton(View v) {
         ((InputMethodManager) TasksDetailsActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(time.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
         userDateTime = Calendar.getInstance();
         DialogUtil.createDateDialog(v.getContext(), (datePicker, year, month, dayOfMonth) -> {
@@ -119,6 +96,23 @@ public class TasksDetailsActivity extends AppCompatActivity {
                 time.setText(DateUtils.formatDisplayDateTime(userDateTime));
             });
         });
+    }
+
+    private void handleAddButton() {
+        if (fieldCheck())
+            Toast.makeText(this, "Please fill all the fields.", Toast.LENGTH_SHORT).show();
+        else {
+            Task task = getTask();
+            if (taskId == NEGATIVE_TASK_ID) {
+                taskId = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).insertTask(task).intValue();
+                incrementStudentClassTaskCount();
+            } else {
+                taskId = StudentifyDatabaseProvider.getTaskDao(TasksDetailsActivity.this).updateTask(task);
+            }
+            task.setId(taskId);
+            NotificationScheduler.scheduleTaskNotification(this, task);
+            finish();
+        }
     }
 
     private void incrementStudentClassTaskCount() {
