@@ -8,16 +8,20 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.util.Log;
 
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
+import cheema.hardeep.sahibdeep.studentify.models.DayTime;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 
 import static android.content.Context.ALARM_SERVICE;
+import static cheema.hardeep.sahibdeep.studentify.utils.DateUtils.getNextDayDate;
 
 public class NotificationScheduler {
 
@@ -36,29 +40,21 @@ public class NotificationScheduler {
         Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling...");
         setupPackageManager(context);
 
-        for (String day : studentClass.getDays()) {
+        for(DayTime dayTime: studentClass.getDayTimes()) {
+            Calendar dayTimeCalendar = getNextDayDate(dayTime);
             Intent intent = new Intent(context, NotificationReceiver.class);
             intent.putExtra(KEY_STUDENT_CLASS_ID, studentClass.getId());
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-//            alarmManager.setRepeating(
-//                    AlarmManager.RTC_WAKEUP,
-//                    studentClass.getStartTime().getTime() - STUDENT_CLASS_REMINDER_TIME_OFFSET,
-//                    AlarmManager.INTERVAL_DAY * SEVEN,
-//                    pendingIntent
-//            );
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    dayTimeCalendar.getTimeInMillis() - STUDENT_CLASS_REMINDER_TIME_OFFSET,
+                    AlarmManager.INTERVAL_DAY * SEVEN,
+                    pendingIntent
+            );
         }
 
         Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling Complete");
-    }
-
-    private static int parseDayOfWeek(String day, Locale locale)
-            throws ParseException {
-        SimpleDateFormat dayFormat = new SimpleDateFormat("E", locale);
-        Date date = dayFormat.parse(day);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
     public static void scheduleTaskNotification(Context context, Task task) {
