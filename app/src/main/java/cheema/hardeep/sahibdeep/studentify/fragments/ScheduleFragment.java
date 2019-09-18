@@ -27,6 +27,7 @@ import cheema.hardeep.sahibdeep.studentify.models.ScheduleDay;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
+import cheema.hardeep.sahibdeep.studentify.utils.SortingUtil;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,7 +83,7 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
         } else {
             noClassSchedule.setVisibility(View.GONE);
             classesRecyclerView.setVisibility(View.VISIBLE);
-            classAdapter.updateListWithDays(studentClassesWithDay, day);
+            classAdapter.updateListWithDays(SortingUtil.sortList(studentClassesWithDay), day);
         }
     }
 
