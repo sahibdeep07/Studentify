@@ -83,7 +83,7 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
         } else {
             noClassSchedule.setVisibility(View.GONE);
             classesRecyclerView.setVisibility(View.VISIBLE);
-            classAdapter.updateListWithDays(SortingUtil.sortList(studentClassesWithDay), day);
+            classAdapter.updateListWithDays(SortingUtil.sortList(studentClassesWithDay, day), day);
         }
     }
 

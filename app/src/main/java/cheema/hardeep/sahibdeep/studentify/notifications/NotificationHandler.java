@@ -87,6 +87,6 @@ public class NotificationHandler {
     }
 
     private static String getTaskNotificationBody(TaskType taskType, String notes) {
-        return "Your " + taskType.name().toLowerCase() + " is due tomorrow. \n" + notes;
+        return "Your " + taskType.name().toLowerCase() + " is due in 12 hours. \n" + notes;
     }
 }

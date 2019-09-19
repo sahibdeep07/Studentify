@@ -135,4 +135,12 @@ public class StudentClass {
     public void setCompletedTest(int completedTest) {
         this.completedTest = completedTest;
     }
+
+    public DayTime getDayTimeForDay(String day) {
+        for (DayTime dayTime : dayTimes) {
+            if(dayTime.getDay().equals(day))
+                return dayTime;
+        }
+        return null;
+    }
 }
