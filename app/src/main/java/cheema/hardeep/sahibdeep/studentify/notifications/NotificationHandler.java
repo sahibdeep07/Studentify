@@ -67,7 +67,7 @@ public class NotificationHandler {
     }
 
     private static int generateRandomNotificationId() {
-        return new Random(Integer.MAX_VALUE).nextInt();
+        return (int) System.currentTimeMillis();
     }
 
     private static PendingIntent generateHomeActivityPendingIntent(Context context) {
