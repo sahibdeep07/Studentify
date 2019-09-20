@@ -14,13 +14,10 @@ import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 public class SortingUtil {
 
     public static List<StudentClass> sortList(List<StudentClass> list, String day) {
-        List<StudentClass> sortedlist = new ArrayList<>();
-        sortedlist.addAll(list);
-
         Comparator<StudentClass> dayTimeComparator = (o1, o2) ->
                 timeInMiliSeconds(o1.getDayTimeForDay(day)) - timeInMiliSeconds(o2.getDayTimeForDay(day));
-        Collections.sort(sortedlist, dayTimeComparator);
-        return sortedlist;
+        Collections.sort(list, dayTimeComparator);
+        return list;
     }
 
     private static int timeInMiliSeconds(DayTime dayTime) {
