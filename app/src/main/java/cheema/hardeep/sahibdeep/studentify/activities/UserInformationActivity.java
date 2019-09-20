@@ -25,6 +25,7 @@ import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
+import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
@@ -82,18 +83,14 @@ public class UserInformationActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         if (!SharedPreferencesProvider.isFirstLaunch(this)) {
-            userInformation = StudentifyDatabaseProvider
-                    .getUserInformationDao(this)
-                    .getUserInformation(SharedPreferencesProvider.getStudentId(this));
+            userInformation = DatabaseUtil.getUserInformation(this);
             setUserInformation();
             clearTermButton.setVisibility(View.VISIBLE);
-            setUserInformation();
         }
 
         saveButton.setOnClickListener(v -> handleSaveUpdateButton());
 
-        clearTermButton.setOnClickListener(v -> DialogUtil.createDeleteConfirmationDialog(this, (dialog, which) -> clearTerm())
-        );
+        clearTermButton.setOnClickListener(v -> DialogUtil.createDeleteConfirmationDialog(this, (dialog, which) -> clearTerm()));
 
         term.setOnFocusChangeListener((v, hasFocus) -> {
             if (hasFocus) {
@@ -112,18 +109,19 @@ public class UserInformationActivity extends AppCompatActivity {
     }
 
     private void handleSaveUpdateButton() {
-        if (fieldCheck())
-            Toast.makeText(this, "Please Fill All The Fields", Toast.LENGTH_SHORT).show();
-        else {
-            UserInformation userInfo = getUserInformation();
+        if (fieldCheck()) {
+            Toast.makeText(this, "Please fill all the fields!", Toast.LENGTH_SHORT).show();
+        } else {
             if (SharedPreferencesProvider.isFirstLaunch(this)) {
+                UserInformation userInfo = createUserInformation();
                 StudentifyDatabaseProvider.getUserInformationDao(this).insertUserInformation(userInfo);
                 StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
                 SharedPreferencesProvider.saveUserId(this, userInfo.getStudentId());
                 SharedPreferencesProvider.saveFirstLaunchCompleted(this);
             } else {
-                StudentifyDatabaseProvider.getUserInformationDao(this).updateUserInformation(userInfo);
-                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
+                updateUserInformationWithFields(userInformation);
+                StudentifyDatabaseProvider.getUserInformationDao(this).updateUserInformation(userInformation);
+                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInformation.getTermName()));
             }
             startActivity(HomeActivity.createIntent(UserInformationActivity.this));
             finish();
@@ -157,15 +155,9 @@ public class UserInformationActivity extends AppCompatActivity {
         term.setText(EMPTY);
     }
 
-    public UserInformation getUserInformation() {
+    public UserInformation createUserInformation() {
         UserInformation userInformation = new UserInformation();
-        userInformation.setName(name.getText().toString());
-        userInformation.setCollegeName(collegeName.getText().toString());
-        userInformation.setStudentId(studentID.getText().toString());
-        userInformation.setPhoneNumber(phoneNumber.getText().toString());
-        userInformation.setDateOfBirth(dob.getText().toString());
-        userInformation.setAddress(address.getText().toString());
-        userInformation.setTermName(term.getText().toString());
+        updateUserInformationWithFields(userInformation);
         return userInformation;
     }
 
@@ -185,6 +177,16 @@ public class UserInformationActivity extends AppCompatActivity {
         term.setStartDate(new Date());
         term.setEndDate(new Date());
         return term;
+    }
+
+    public void updateUserInformationWithFields(UserInformation userInformation) {
+        userInformation.setName(name.getText().toString());
+        userInformation.setCollegeName(collegeName.getText().toString());
+        userInformation.setStudentId(studentID.getText().toString());
+        userInformation.setPhoneNumber(phoneNumber.getText().toString());
+        userInformation.setDateOfBirth(dob.getText().toString());
+        userInformation.setAddress(address.getText().toString());
+        userInformation.setTermName(term.getText().toString());
     }
 
     public void setUserInformation() {
