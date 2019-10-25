@@ -1,5 +1,6 @@
 package cheema.hardeep.sahibdeep.studentify.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -51,6 +52,20 @@ public class DateUtils {
     public static String formatDisplayDate(Calendar time) {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
         return sdf.format(time.getTime());
+    }
+
+    public static String formatDisplayDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        return sdf.format(date.getTime());
+    }
+
+    public static Date convertStringToDate(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        try {
+            return sdf.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
     public static Calendar getNextDayDate(DayTime dayTime) {

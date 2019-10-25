@@ -3,6 +3,7 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,11 +22,13 @@ import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.database.SharedPreferencesProvider;
+import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabase;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 import cheema.hardeep.sahibdeep.studentify.models.tables.UserInformation;
@@ -33,7 +36,7 @@ import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.DialogUtil;
 
-public class UserInformationActivity extends AppCompatActivity {
+public class UserInformationActivity extends AppCompatActivity implements DialogUtil.InputDialogInterface {
 
     public static Intent createIntent(Context context) {
         return new Intent(context, UserInformationActivity.class);
@@ -87,8 +90,6 @@ public class UserInformationActivity extends AppCompatActivity {
     UserInformation userInformation = null;
     Calendar userDob;
 
-    Calendar termDate = Calendar.getInstance();
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,23 +122,39 @@ public class UserInformationActivity extends AppCompatActivity {
             }
         });
 
-        if (term.getText().toString().isEmpty()) {
-            termStartDate.setVisibility(View.GONE);
-        }
+
+        termStartDate.setVisibility(term.getText().toString().isEmpty() ? View.GONE : View.VISIBLE);
         termStartDate.setOnClickListener(v -> DialogUtil.createDobDateDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
-            termDate.set(Calendar.YEAR, year);
-            termDate.set(Calendar.MONTH, month);
-            termDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            termStartDate.setText(DateUtils.formatDisplayDate(termDate));
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            termStartDate.setText(DateUtils.formatDisplayDate(calendar));
         }));
 
-        termEndDate.setVisibility(View.GONE);
+
+        termEndDate.setVisibility(term.getText().toString().isEmpty() ? View.GONE : View.VISIBLE);
         termEndDate.setOnClickListener(v -> DialogUtil.createDobDateDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
-            termDate.set(Calendar.YEAR, year);
-            termDate.set(Calendar.MONTH, month);
-            termDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            termEndDate.setText(DateUtils.formatDisplayDate(termDate));
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(Calendar.YEAR, year);
+            calendar.set(Calendar.MONTH, month);
+            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            termEndDate.setText(DateUtils.formatDisplayDate(calendar));
         }));
+
+
+        addButton.setOnClickListener(v -> DialogUtil.createInputDialog(this, this));
+    }
+
+    @Override
+    public void onTermNameSave(String termName) {
+        if(!termName.isEmpty()) {
+            term.setText(termName);
+            termStartDate.setVisibility(View.VISIBLE);
+            termEndDate.setVisibility(View.VISIBLE);
+        } else {
+            Toast.makeText(this, "Empty term name is not accepted", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void handleSaveUpdateButton() {
@@ -147,13 +164,13 @@ public class UserInformationActivity extends AppCompatActivity {
             if (SharedPreferencesProvider.isFirstLaunch(this)) {
                 UserInformation userInfo = createUserInformation();
                 StudentifyDatabaseProvider.getUserInformationDao(this).insertUserInformation(userInfo);
-                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInfo.getTermName()));
+                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm());
                 SharedPreferencesProvider.saveUserId(this, userInfo.getStudentId());
                 SharedPreferencesProvider.saveFirstLaunchCompleted(this);
             } else {
                 updateUserInformationWithFields(userInformation);
                 StudentifyDatabaseProvider.getUserInformationDao(this).updateUserInformation(userInformation);
-                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm(userInformation.getTermName()));
+                StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm());
             }
             startActivity(HomeActivity.createIntent(UserInformationActivity.this));
             finish();
@@ -161,12 +178,22 @@ public class UserInformationActivity extends AppCompatActivity {
     }
 
     private void termDialog(View v) {
-        DialogUtil.createTermDialog(v.getContext(), termItems, (dialog, which) -> {
-            ((InputMethodManager) UserInformationActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(term.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
-            int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-            term.setText(termItems[selectedPosition]);
-            dialog.dismiss();
-        });
+        List<Term> allTerms = StudentifyDatabaseProvider.getTermDao(this).getAllTerms();
+        String[] termNames = new String[allTerms.size()];
+        for (int i = 0; i < allTerms.size(); i++) {
+            termNames[i] = allTerms.get(i).getName();
+        }
+
+        if (termNames.length == 0) {
+            Toast.makeText(this, "There are no terms available", Toast.LENGTH_SHORT).show();
+        } else {
+            DialogUtil.createTermDialog(v.getContext(), termNames, (dialog, which) -> {
+                ((InputMethodManager) UserInformationActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(term.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                int selectedPosition = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                term.setText(termNames[selectedPosition]);
+                dialog.dismiss();
+            });
+        }
     }
 
     private void dobDialog() {
@@ -200,15 +227,17 @@ public class UserInformationActivity extends AppCompatActivity {
                 || phoneNumber.getText().toString().isEmpty()
                 || dob.getText().toString().isEmpty()
                 || address.getText().toString().isEmpty()
-                || term.getText().toString().isEmpty();
+                || term.getText().toString().isEmpty()
+                || termStartDate.getText().toString().isEmpty()
+                || termEndDate.getText().toString().isEmpty();
     }
 
-    public Term getTerm(String termName) {
-        Term term = new Term();
-        term.setName(termName);
-        term.setStartDate(new Date());
-        term.setEndDate(new Date());
-        return term;
+    public Term getTerm() {
+        Term result = new Term();
+        result.setName(term.getText().toString());
+        result.setStartDate(DateUtils.convertStringToDate(termStartDate.getText().toString()));
+        result.setEndDate(DateUtils.convertStringToDate(termEndDate.getText().toString()));
+        return result;
     }
 
     public void updateUserInformationWithFields(UserInformation userInformation) {
@@ -230,6 +259,9 @@ public class UserInformationActivity extends AppCompatActivity {
             dob.setText(userInformation.getDateOfBirth());
             address.setText(userInformation.getAddress());
             term.setText(userInformation.getTermName());
+            Term term = StudentifyDatabaseProvider.getTermDao(this).getTerm(userInformation.getTermName());
+            termStartDate.setText(DateUtils.formatDisplayDate(term.getStartDate()));
+            termEndDate.setText(DateUtils.formatDisplayDate(term.getEndDate()));
         }
     }
 }
