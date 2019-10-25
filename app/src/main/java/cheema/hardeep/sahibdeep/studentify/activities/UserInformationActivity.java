@@ -2,12 +2,16 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -71,8 +75,19 @@ public class UserInformationActivity extends AppCompatActivity {
     @BindView(R.id.clearTerm)
     Button clearTermButton;
 
+    @BindView(R.id.addTermButton)
+    ImageView addButton;
+
+    @BindView(R.id.termStart)
+    TextView termStartDate;
+
+    @BindView(R.id.termEnd)
+    TextView termEndDate;
+
     UserInformation userInformation = null;
     Calendar userDob;
+
+    Calendar termDate = Calendar.getInstance();
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -106,6 +121,23 @@ public class UserInformationActivity extends AppCompatActivity {
             }
         });
 
+        if (term.getText().toString().isEmpty()) {
+            termStartDate.setVisibility(View.GONE);
+        }
+        termStartDate.setOnClickListener(v -> DialogUtil.createDobDateDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
+            termDate.set(Calendar.YEAR, year);
+            termDate.set(Calendar.MONTH, month);
+            termDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            termStartDate.setText(DateUtils.formatDisplayDate(termDate));
+        }));
+
+        termEndDate.setVisibility(View.GONE);
+        termEndDate.setOnClickListener(v -> DialogUtil.createDobDateDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
+            termDate.set(Calendar.YEAR, year);
+            termDate.set(Calendar.MONTH, month);
+            termDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            termEndDate.setText(DateUtils.formatDisplayDate(termDate));
+        }));
     }
 
     private void handleSaveUpdateButton() {

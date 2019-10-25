@@ -44,5 +44,7 @@
     <string name="professor">Professor</string>
     <string name="class_title">Class Title</string>
     <string name="date_time">Date Time</string>
-    <string name="user_info">User Info</string>\
+    <string name="user_info">User Info</string>
+    <string name="end_date">End Date</string>
+    <string name="start_date">Start Date</string>\
 </resources>
