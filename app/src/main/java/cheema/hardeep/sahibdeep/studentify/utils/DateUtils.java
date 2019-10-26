@@ -1,6 +1,5 @@
 package cheema.hardeep.sahibdeep.studentify.utils;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,8 +11,8 @@ public class DateUtils {
 
     private static final String TIME_FORMAT = "hh:mm a";
     private static final String DAY_FORMAT = "E";
-    private static final String DATE_FORMAT = "MMM dd, YYYY";
-    private static final String DATE_TIME_FORMAT = "MMM dd, YYYY hh:mm a";
+    private static final String DATE_FORMAT = "MMM dd, yyyy";
+    private static final String DATE_TIME_FORMAT = "MMM dd, yyyy hh:mm a";
     private static final String MON = "Mon";
     private static final String TUE = "Tue";
     private static final String WED = "Wed";
@@ -57,15 +56,6 @@ public class DateUtils {
     public static String formatDisplayDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
         return sdf.format(date.getTime());
-    }
-
-    public static Date convertStringToDate(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
-        try {
-            return sdf.parse(date);
-        } catch (ParseException e) {
-            return null;
-        }
     }
 
     public static Calendar getNextDayDate(DayTime dayTime) {
