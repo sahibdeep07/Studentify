@@ -34,13 +34,13 @@ public class NotificationScheduler {
         Log.d(NotificationScheduler.class.getSimpleName(), "Student Class Scheduling...");
         setupPackageManager(context);
 
-        for(DayTime dayTime: studentClass.getDayTimes()) {
+        for (DayTime dayTime : studentClass.getDayTimes()) {
             Calendar dayTimeCalendar = getNextDayDate(dayTime);
 
             Intent intent = new Intent(context, NotificationReceiver.class);
             intent.putExtra(KEY_STUDENT_CLASS_ID, studentClass.getId());
 
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, (int) System.currentTimeMillis(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
             AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
             alarmManager.setRepeating(
                     AlarmManager.RTC_WAKEUP,
