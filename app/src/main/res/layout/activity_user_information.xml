@@ -168,6 +168,10 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/termContainer"
@@ -175,6 +179,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="12dp"
+                android:layout_weight="1"
                 android:hint="@string/term"
                 android:textColorHint="@color/primaryTextColor">
 
@@ -188,6 +193,55 @@
                     android:typeface="serif" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/addTermButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:layout_marginEnd="12dp"
+                app:srcCompat="@drawable/ic_add_circle_outline_white_32dp" />
+
+        </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+            <TextView
+                android:id="@+id/termStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginEnd="6dp"
+                android:background="@drawable/transparent_curved_button"
+                android:gravity="center"
+                android:padding="12dp"
+                android:hint="@string/start_date"
+                android:textColorHint="@color/primaryTextColor"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                android:typeface="serif" />
+
+            <TextView
+                android:id="@+id/termEnd"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="12dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginStart="6dp"
+                android:background="@drawable/transparent_curved_button"
+                android:gravity="center"
+                android:padding="12dp"
+                android:hint="@string/end_date"
+                android:textColorHint="@color/primaryTextColor"
+                android:textColor="@color/primaryTextColor"
+                android:textSize="16sp"
+                android:typeface="serif" />
+        </LinearLayout>
 
         </LinearLayout>
 

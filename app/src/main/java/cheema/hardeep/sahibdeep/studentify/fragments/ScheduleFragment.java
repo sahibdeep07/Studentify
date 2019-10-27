@@ -1,6 +1,5 @@
 package cheema.hardeep.sahibdeep.studentify.fragments;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -25,6 +25,7 @@ import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ScheduleInterface;
 import cheema.hardeep.sahibdeep.studentify.models.ScheduleDay;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
+import cheema.hardeep.sahibdeep.studentify.models.tables.Term;
 import cheema.hardeep.sahibdeep.studentify.utils.DatabaseUtil;
 import cheema.hardeep.sahibdeep.studentify.utils.DateUtils;
 import cheema.hardeep.sahibdeep.studentify.utils.SortingUtil;
@@ -89,22 +90,23 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
 
     @Override
     public void onDaySelected(String day) {
-     initializeView(day);
+        initializeView(day);
     }
 
     private List<ScheduleDay> generateDates() {
+        Term term = DatabaseUtil.getUserTerm(getContext());
+        Date fromDate = term.getStartDate().before(new Date()) ? new Date() : term.getStartDate();
         List<ScheduleDay> scheduleDays = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
-        int currentMonth = cal.get(Calendar.MONTH);
-        currentMonth = currentMonth + NUMBER_OF_MONTHS;
-        while (currentMonth != cal.get(Calendar.MONTH)) {
+        cal.setTime(fromDate);
+        while (cal.getTime().before(term.getEndDate())) {
             scheduleDays.add(new ScheduleDay(cal.get(Calendar.DATE), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US)));
-            cal.add(Calendar.DAY_OF_MONTH, 1);
+            cal.add(Calendar.DATE, 1);
         }
         return scheduleDays;
     }
 
-    private String getCurrentDay(){
+    private String getCurrentDay() {
         Calendar cal = Calendar.getInstance();
         String currentDay = DateUtils.formatDisplayDay(cal);
         return currentDay;

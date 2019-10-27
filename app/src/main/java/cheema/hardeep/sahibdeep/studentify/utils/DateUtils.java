@@ -11,8 +11,8 @@ public class DateUtils {
 
     private static final String TIME_FORMAT = "hh:mm a";
     private static final String DAY_FORMAT = "E";
-    private static final String DATE_FORMAT = "MMM dd, YYYY";
-    private static final String DATE_TIME_FORMAT = "MMM dd, YYYY hh:mm a";
+    private static final String DATE_FORMAT = "MMM dd, yyyy";
+    private static final String DATE_TIME_FORMAT = "MMM dd, yyyy hh:mm a";
     private static final String MON = "Mon";
     private static final String TUE = "Tue";
     private static final String WED = "Wed";
@@ -51,6 +51,11 @@ public class DateUtils {
     public static String formatDisplayDate(Calendar time) {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
         return sdf.format(time.getTime());
+    }
+
+    public static String formatDisplayDate(Date date) {
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT, Locale.US);
+        return sdf.format(date.getTime());
     }
 
     public static Calendar getNextDayDate(DayTime dayTime) {
