@@ -5,13 +5,19 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.text.InputType;
+import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.TimePicker;
 
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
+
+import cheema.hardeep.sahibdeep.studentify.R;
 
 public class DialogUtil {
 
@@ -22,6 +28,8 @@ public class DialogUtil {
     private static final String CANCEL = "Cancel";
     private static final String SAVE = "Save";
     private static final int THOUSAND = 1000;
+    private static final int DIALOG_SPACING_SIDES = 60;
+    private static final int DIALOG_SPACING_LENGTH = 20;
 
     public interface InputDialogInterface {
         void onTermNameSave(String termName);
@@ -74,16 +82,16 @@ public class DialogUtil {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle("Term Name");
 
-        TextInputLayout textInputLayout = new TextInputLayout(context);
-        textInputLayout.setPadding(19, 0, 19, 0);
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        textInputLayout.addView(input);
-        builder.setView(textInputLayout);
+        input.setTextSize(20f);
+        input.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimaryDark)));
 
         builder.setPositiveButton(SAVE, (dialog, which) -> inputDialogInterface.onTermNameSave(input.getText().toString()));
         builder.setNegativeButton(CANCEL, (dialog, which) -> dialog.cancel());
 
-        builder.show();
+        AlertDialog alertDialog = builder.create();
+        alertDialog.setView(input, DIALOG_SPACING_SIDES, DIALOG_SPACING_LENGTH, DIALOG_SPACING_SIDES, DIALOG_SPACING_LENGTH);
+        alertDialog.show();
     }
 }
