@@ -87,7 +87,7 @@ public class DialogUtil {
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setTextSize(DIALOG_TEXT_SIZE);
-        input.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimaryDark)));
+        input.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimary)));
 
         builder.setPositiveButton(SAVE, (dialog, which) -> inputDialogInterface.onTermNameSave(input.getText().toString()));
         builder.setNegativeButton(CANCEL, (dialog, which) -> dialog.cancel());
