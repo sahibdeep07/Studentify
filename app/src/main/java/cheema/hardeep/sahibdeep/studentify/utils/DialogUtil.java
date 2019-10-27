@@ -30,6 +30,8 @@ public class DialogUtil {
     private static final int THOUSAND = 1000;
     private static final int DIALOG_SPACING_SIDES = 60;
     private static final int DIALOG_SPACING_LENGTH = 20;
+    private static final float DIALOG_TEXT_SIZE = 20f;
+    private static final String DIALOG_TERM_NAME = "Term Name";
 
     public interface InputDialogInterface {
         void onTermNameSave(String termName);
@@ -80,11 +82,11 @@ public class DialogUtil {
 
     public static void createInputDialog(Context context, InputDialogInterface inputDialogInterface) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle("Term Name");
+        builder.setTitle(DIALOG_TERM_NAME);
 
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
-        input.setTextSize(20f);
+        input.setTextSize(DIALOG_TEXT_SIZE);
         input.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimaryDark)));
 
         builder.setPositiveButton(SAVE, (dialog, which) -> inputDialogInterface.onTermNameSave(input.getText().toString()));
