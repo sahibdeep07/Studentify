@@ -121,7 +121,7 @@ public class UserInformationActivity extends AppCompatActivity implements Dialog
         });
 
         termStartDate.setVisibility(term.getText().toString().isEmpty() ? View.GONE : View.VISIBLE);
-        termStartDate.setOnClickListener(v -> DialogUtil.createDobDateDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
+        termStartDate.setOnClickListener(v -> DialogUtil.createDateDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
             startDate.set(Calendar.YEAR, year);
             startDate.set(Calendar.MONTH, month);
             startDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -129,7 +129,7 @@ public class UserInformationActivity extends AppCompatActivity implements Dialog
         }));
 
         termEndDate.setVisibility(term.getText().toString().isEmpty() ? View.GONE : View.VISIBLE);
-        termEndDate.setOnClickListener(v -> DialogUtil.createDobDateDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
+        termEndDate.setOnClickListener(v -> DialogUtil.createDateDialog(v.getContext(), (view, year, month, dayOfMonth) -> {
             endDate.set(Calendar.YEAR, year);
             endDate.set(Calendar.MONTH, month);
             endDate.set(Calendar.DAY_OF_MONTH, dayOfMonth);

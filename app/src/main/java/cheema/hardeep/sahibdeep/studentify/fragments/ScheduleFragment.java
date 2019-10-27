@@ -1,6 +1,7 @@
 package cheema.hardeep.sahibdeep.studentify.fragments;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -37,6 +39,7 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
 
     private static final String WILDCARD = "%";
     private static final int NUMBER_OF_MONTHS = 3;
+    private static final int SCROLL_OFFSET = 4;
 
     @BindView(R.id.scheduleSemester)
     TextView semester;
@@ -52,7 +55,7 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
 
     private ScheduleDaysAdapter daysAdapter;
     private ClassAdapter classAdapter;
-
+    private int scrollPosition = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,10 +65,12 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
 
         semester.setText(DatabaseUtil.getUserInformation(getContext()).getTermName());
 
-        daysRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false);
+        daysRecyclerView.setLayoutManager(layoutManager);
         daysAdapter = new ScheduleDaysAdapter(this);
         daysAdapter.updateDaysList(generateDates());
         daysRecyclerView.setAdapter(daysAdapter);
+        daysRecyclerView.smoothScrollToPosition(scrollPosition + SCROLL_OFFSET);
 
         classesRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.VERTICAL, false));
         classAdapter = new ClassAdapter(true);
@@ -95,13 +100,19 @@ public class ScheduleFragment extends Fragment implements ScheduleInterface {
 
     private List<ScheduleDay> generateDates() {
         Term term = DatabaseUtil.getUserTerm(getContext());
-        Date fromDate = term.getStartDate().before(new Date()) ? new Date() : term.getStartDate();
         List<ScheduleDay> scheduleDays = new ArrayList<>();
         Calendar cal = Calendar.getInstance();
-        cal.setTime(fromDate);
+        cal.setTime(term.getStartDate());
+        int index = 0;
+
+        Calendar today = Calendar.getInstance();
         while (cal.getTime().before(term.getEndDate())) {
             scheduleDays.add(new ScheduleDay(cal.get(Calendar.DATE), cal.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.US)));
             cal.add(Calendar.DATE, 1);
+
+            //Scroll Position to Today's Date
+            index++;
+            if(cal.get(Calendar.MONTH) == today.get(Calendar.MONTH) && cal.get(Calendar.DATE) == today.get(Calendar.DATE)) scrollPosition = index;
         }
         return scheduleDays;
     }

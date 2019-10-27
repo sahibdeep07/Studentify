@@ -6,14 +6,8 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.text.InputType;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.TimePicker;
-
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 
@@ -31,7 +25,8 @@ public class DialogUtil {
     private static final int DIALOG_SPACING_SIDES = 60;
     private static final int DIALOG_SPACING_LENGTH = 20;
     private static final float DIALOG_TEXT_SIZE = 20f;
-    private static final String DIALOG_TERM_NAME = "Term Name";
+    private static final String DIALOG_PLEASE_PROVIDE_INFO = "Please Provide Information";
+    private static final String HINT_TERM_NAME = "Term Name";
 
     public interface InputDialogInterface {
         void onTermNameSave(String termName);
@@ -82,11 +77,12 @@ public class DialogUtil {
 
     public static void createInputDialog(Context context, InputDialogInterface inputDialogInterface) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(DIALOG_TERM_NAME);
+        builder.setTitle(DIALOG_PLEASE_PROVIDE_INFO);
 
         final EditText input = new EditText(context);
         input.setInputType(InputType.TYPE_CLASS_TEXT);
         input.setTextSize(DIALOG_TEXT_SIZE);
+        input.setHint(HINT_TERM_NAME);
         input.setBackgroundTintList(ColorStateList.valueOf(context.getResources().getColor(R.color.colorPrimary)));
 
         builder.setPositiveButton(SAVE, (dialog, which) -> inputDialogInterface.onTermNameSave(input.getText().toString()));
