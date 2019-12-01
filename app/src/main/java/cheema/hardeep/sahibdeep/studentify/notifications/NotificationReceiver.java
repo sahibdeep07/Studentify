@@ -29,7 +29,6 @@ public class NotificationReceiver extends BroadcastReceiver {
         } else if (taskId != NEGATIVE_ONE) {
             handleTaskWork(context, taskId);
         }
-        Log.d(StudentifyWorker.class.getSimpleName(), "Notification Data Processed!");
     }
 
     private void handleStudentClassWork(Context context, int classId) {

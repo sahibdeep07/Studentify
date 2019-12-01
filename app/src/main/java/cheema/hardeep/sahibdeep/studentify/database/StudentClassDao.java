@@ -18,23 +18,8 @@ public interface StudentClassDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertStudentClass(StudentClass studentClass);
 
-    @Query("SELECT * FROM StudentClass")
-    List<StudentClass> getAllStudentClasses();
-
-    @Query("SELECT * FROM StudentClass WHERE id =:id")
-    StudentClass getStudentClass(int id);
-
-    @Query("SELECT * FROM StudentClass WHERE term_id =:termId")
-    List<StudentClass> getStudentClasses(int termId);
-
     @Query("SELECT * FROM StudentClass WHERE days LIKE :days")
     List<StudentClass> getStudentClassesWithDay(String days);
-
-    @Query("SELECT * FROM StudentClass WHERE days LIKE :day")
-    List<StudentClassDetails> getStudentClassesWithTasks(String day);
-
-    @Update
-    int updateStudentClass(StudentClass studentClass);
 
     @Query("UPDATE StudentClass SET total_homework = total_homework + :value WHERE id =:classId")
     int updateStudentClassTotalHomework(int classId, int value);

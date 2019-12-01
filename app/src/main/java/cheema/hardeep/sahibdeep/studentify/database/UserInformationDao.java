@@ -28,7 +28,4 @@ public interface UserInformationDao {
 
     @Update
     int updateUserInformation(UserInformation userInformation);
-
-    @Delete
-    void deleteUserInformation(UserInformation userInformation);
 }

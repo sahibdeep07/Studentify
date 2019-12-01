@@ -27,12 +27,6 @@ public interface TermDao {
     @Query("SELECT * FROM Term WHERE name =:termName")
     TermDetails getTermWithClasses(String termName);
 
-    @Update
-    int updateTerm(Term term);
-
-    @Delete
-    void deleteTerm(Term term);
-
     @Query("DELETE FROM Term")
     void deleteAll();
 }

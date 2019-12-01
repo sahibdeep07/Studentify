@@ -18,14 +18,8 @@ public interface TaskDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertTask(Task task);
 
-    @Query("SELECT * FROM Task")
-    List<Task> getAllTasks();
-
     @Query("SELECT * FROM Task WHERE id =:taskId")
     Task getTask(int taskId);
-
-    @Query("SELECT * FROM Task WHERE student_class_id =:studentClassId")
-    List<Task> getTasks(int studentClassId);
 
     @Query("SELECT * FROM Task WHERE student_class_id =:studentClassId AND type=:taskType")
     List<Task> getTaskWithType(int studentClassId, String taskType);
