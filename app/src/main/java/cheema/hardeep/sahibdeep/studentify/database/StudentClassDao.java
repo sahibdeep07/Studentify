@@ -18,6 +18,9 @@ public interface StudentClassDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     Long insertStudentClass(StudentClass studentClass);
 
+    @Query("SELECT * FROM StudentClass WHERE id =:id")
+    StudentClass getStudentClass(int id);
+
     @Query("SELECT * FROM StudentClass WHERE days LIKE :days")
     List<StudentClass> getStudentClassesWithDay(String days);
 
