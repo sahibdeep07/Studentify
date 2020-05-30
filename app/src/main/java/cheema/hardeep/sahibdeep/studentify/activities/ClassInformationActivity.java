@@ -3,6 +3,7 @@ package cheema.hardeep.sahibdeep.studentify.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -73,6 +74,13 @@ public class ClassInformationActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         ButterKnife.bind(this);
         daysList = new ArrayList<>();
+
+        cancelButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         cancelButton.setOnClickListener(v -> finish());
         addButton.setOnClickListener(v -> {

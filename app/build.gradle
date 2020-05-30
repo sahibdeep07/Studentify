@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.jakewharton.butterknife'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -44,21 +47,26 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     //Material Design Components
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.2.0-beta01'
 
     //Room
-    implementation "androidx.room:room-runtime:2.1.0"
-    annotationProcessor "androidx.room:room-compiler:2.1.0"
-    implementation "androidx.room:room-rxjava2:2.1.0"
+    implementation "androidx.room:room-runtime:2.2.5"
+    annotationProcessor "androidx.room:room-compiler:2.2.5"
+    implementation "androidx.room:room-rxjava2:2.2.5"
 
     //ButterKnife
-    implementation 'com.jakewharton:butterknife:10.1.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.1.0'
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'com.jakewharton:butterknife:10.2.0'
+    kapt 'com.jakewharton:butterknife-compiler:10.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 
     //Gson
-    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     //Worker
-    implementation "androidx.work:work-runtime:2.2.0"
+    implementation "androidx.work:work-runtime:2.3.4"
+    implementation "androidx.core:core-ktx:1.2.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
