@@ -14,7 +14,9 @@ import java.util.Random;
 
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.activities.HomeActivity;
+import cheema.hardeep.sahibdeep.studentify.activities.HomeActivityKt;
 import cheema.hardeep.sahibdeep.studentify.activities.TasksActivity;
+import cheema.hardeep.sahibdeep.studentify.activities.TasksActivityKt;
 import cheema.hardeep.sahibdeep.studentify.models.tables.StudentClass;
 import cheema.hardeep.sahibdeep.studentify.models.tables.Task;
 import cheema.hardeep.sahibdeep.studentify.models.tables.TaskType;
@@ -71,13 +73,13 @@ public class NotificationHandler {
     }
 
     private static PendingIntent generateHomeActivityPendingIntent(Context context) {
-        return PendingIntent.getActivity(context, 0, HomeActivity.createIntent(context), 0);
+        return PendingIntent.getActivity(context, 0, HomeActivityKt.createHomeActivityIntent(context), 0);
     }
 
     private static PendingIntent generateTaskActivityPendingIntent(Context context, int taskClassId) {
-        Intent homeActivityIntent = HomeActivity.createIntent(context);
+        Intent homeActivityIntent = HomeActivityKt.createHomeActivityIntent(context);
         homeActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NO_ANIMATION);
-        Intent taskActivityIntent = TasksActivity.createIntent(context, taskClassId);
+        Intent taskActivityIntent = TasksActivityKt.createTaskActivityIntent(context, taskClassId);
 
         return PendingIntent.getActivities(context, 0, new Intent[]{homeActivityIntent, taskActivityIntent}, 0);
     }

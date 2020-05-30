@@ -167,7 +167,7 @@ public class UserInformationActivity extends AppCompatActivity implements Dialog
                 StudentifyDatabaseProvider.getUserInformationDao(this).updateUserInformation(userInformation);
                 StudentifyDatabaseProvider.getTermDao(this).insertTerm(getTerm());
             }
-            startActivity(HomeActivity.createIntent(UserInformationActivity.this));
+            startActivity(HomeActivityKt.createHomeActivityIntent(UserInformationActivity.this));
             finish();
         }
     }

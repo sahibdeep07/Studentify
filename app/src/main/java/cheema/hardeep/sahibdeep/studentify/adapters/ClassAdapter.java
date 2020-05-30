@@ -14,6 +14,7 @@ import java.util.List;
 
 import cheema.hardeep.sahibdeep.studentify.R;
 import cheema.hardeep.sahibdeep.studentify.activities.TasksActivity;
+import cheema.hardeep.sahibdeep.studentify.activities.TasksActivityKt;
 import cheema.hardeep.sahibdeep.studentify.database.StudentifyDatabaseProvider;
 import cheema.hardeep.sahibdeep.studentify.interfaces.ClassesInterface;
 import cheema.hardeep.sahibdeep.studentify.models.DayTime;
@@ -72,7 +73,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         holder.test.setText(getCompletedTestSting(studentClass));
         holder.homework.setText(getFinishedHomeworkString(studentClass));
         holder.itemView.setOnClickListener(v ->
-                v.getContext().startActivity(TasksActivity.createIntent(v.getContext(), studentClass.getId()))
+                v.getContext().startActivity(TasksActivityKt.createTaskActivityIntent(v.getContext(), studentClass.getId()))
         );
 
         if (!isSchedule) {
